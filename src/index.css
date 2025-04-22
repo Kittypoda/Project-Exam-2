@@ -1,3 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&family=Racing+Sans+One&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+.btn {
+  @apply px-9 py-3 rounded-md font-alexandria text-sm text-white shadow-lg transition;
+}
+
+.btn-primary {
+  @apply bg-dustygreen hover:bg-mintgreen hover:text-blackish;
+}
+
+.btn-secondary {
+  @apply bg-blackish text-white hover:bg-white hover:text-blackish;
+}

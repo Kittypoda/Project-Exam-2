@@ -7,6 +7,7 @@ import Login from './pages/Login';
 import './index.css';
 import Register from './pages/Register';
 import Avenue from './pages/AvenuePage';
+import ManagerLogin from './pages/ManagerLogin';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -16,6 +17,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route index element={<Home />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />}
+           />
+           <Route path="managerlogin" element={<ManagerLogin />}
            />
             <Route path="avenue" element={<Avenue />}
            />
