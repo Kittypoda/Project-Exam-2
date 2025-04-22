@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&family=Racing+Sans+One&display=swap');
 
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -13,4 +15,16 @@
 
 .btn-secondary {
   @apply bg-blackish text-white hover:bg-white hover:text-blackish;
+}
+
+h1 {
+  @apply font-alexandria font-semibold text-h1-mobile md:text-h1 text-black;
+}
+
+h2 {
+  @apply font-alexandria font-extralight text-h2 text-black;
+}
+
+p {
+  @apply font-alexandria font-light text-base text-black;
 }

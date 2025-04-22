@@ -1,3 +1,4 @@
 export default function Home() {
-  return <h1 className="text-3xl font-bold">Welcome to Holidaze 🏖️</h1>;
+  return <div><h1>hei</h1><h2>hei</h2><p>hei</p></div>
+  ;
 }
