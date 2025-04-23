@@ -5,7 +5,7 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header className="bg-white p-4 sticky top-0 z-50">
+    <header className="bg-white px-4 pt-4 pb-2 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <Link to="/" className="text-2xl font-bold font-logo">
           Holidaze

@@ -1,5 +1,5 @@
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+ /** @type {import('tailwindcss').Config} */
+ module.exports = {
   content: [
     "./index.html",
     "./src/**/*.{js,jsx}",
@@ -20,9 +20,21 @@ module.exports = {
         mintgreen: '#ECF4F3',
         blackish: '#343434',
         lightgray: '#FAFAFA',
+        overlaygreen: '#123F45',
+      },
+      animation: {
+        'float-x': 'floatX 15s ease-in-out infinite',
+      },
+      keyframes: {
+        floatX: {
+          '0%, 100%': { transform: 'translateX(0)' },
+          '50%': { transform: 'translateX(-20px)' },
+        },
+      },
+      borderRadius: {
+        '40px': '40px',
       },
     },
   },
   plugins: [],
-}
-
+};

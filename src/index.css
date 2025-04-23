@@ -14,7 +14,7 @@
 }
 
 .btn-secondary {
-  @apply bg-blackish text-white hover:bg-white hover:text-blackish;
+  @apply bg-blackish text-white hover:bg-mintgreen hover:text-blackish;
 }
 
 h1 {

@@ -6,7 +6,7 @@ export default function App() {
   return (
     <>
       <Header />
-      <main className="p-6">
+      <main className="px-6">
         <Outlet />
       </main>
       <Footer />
