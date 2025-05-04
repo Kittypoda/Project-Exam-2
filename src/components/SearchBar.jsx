@@ -20,7 +20,7 @@ export default function SearchBar({ onSearch, onClear, isSearching }) {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-6 mt-8">
+    <div className="max-w-7xl mx-auto mt-8">
       <form
         onSubmit={handleSubmit}
         className="flex flex-wrap items-end gap-4"
@@ -33,7 +33,7 @@ export default function SearchBar({ onSearch, onClear, isSearching }) {
             value={location}
             onChange={(e) => setLocation(e.target.value)}
             placeholder="Where are you going?"
-            className="w-full font-alexandria placeholder-black text-sm font-extralight border rounded-md p-2"
+            className="w-full font-alexandria placeholder-black text-sm font-extralight"
           />
         </div>
 
@@ -44,7 +44,7 @@ export default function SearchBar({ onSearch, onClear, isSearching }) {
             type="date"
             value={checkIn}
             onChange={(e) => setCheckIn(e.target.value)}
-            className="w-full font-alexandria text-sm font-extralight border rounded-md p-2"
+            className="w-full font-alexandria text-sm font-extralight"
           />
         </div>
 
@@ -55,7 +55,7 @@ export default function SearchBar({ onSearch, onClear, isSearching }) {
             type="date"
             value={checkOut}
             onChange={(e) => setCheckOut(e.target.value)}
-            className="w-full font-alexandria text-sm font-extralight border rounded-md p-2"
+            className="w-full font-alexandria text-sm font-extralight"
           />
         </div>
 
@@ -68,7 +68,7 @@ export default function SearchBar({ onSearch, onClear, isSearching }) {
             value={guests}
             onChange={(e) => setGuests(e.target.value)}
             placeholder="Add guests"
-            className="w-full font-alexandria text-sm font-extralight border rounded-md p-2"
+            className="w-full font-alexandria text-sm font-extralight"
           />
         </div>
 
@@ -80,7 +80,7 @@ export default function SearchBar({ onSearch, onClear, isSearching }) {
               onClick={handleClear}
               className="text-blackish border border-blackish p-3 rounded-md hover:bg-lightgray transition"
             >
-              Clear search
+              Clear
             </button>
           )}
           <button

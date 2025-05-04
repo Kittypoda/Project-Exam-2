@@ -55,7 +55,6 @@ export default function Home() {
       let venuesToFilter = [];
 
       if (location) {
-        // Hvis location er satt, søk basert på location
         const response = await fetch(
           `https://v2.api.noroff.dev/holidaze/venues/search?q=${location}`
         );
@@ -65,7 +64,6 @@ export default function Home() {
         const data = await response.json();
         venuesToFilter = data.data || [];
       } else {
-        // Hvis location IKKE er satt, hent ALLE venues
         const response = await fetch(
           `https://v2.api.noroff.dev/holidaze/venues?limit=100&page=1&sort=created&sortOrder=desc`
         );
@@ -78,12 +76,10 @@ export default function Home() {
 
       let filtered = venuesToFilter;
 
-      // Filtrer på gjester hvis angitt
       if (guests) {
         filtered = filtered.filter((venue) => venue.maxGuests >= parseInt(guests));
       }
 
-      // Filtrer på datoer hvis både checkIn og checkOut er valgt
       if (checkIn && checkOut) {
         const checkInDate = new Date(checkIn);
         const checkOutDate = new Date(checkOut);
@@ -129,7 +125,7 @@ export default function Home() {
   return (
     <>
       {/* Hero / Banner */}
-      <section className="relative h-[60vh] md:h-[80vh] overflow-hidden">
+      <section className="relative h-[60vh] md:h-[80vh] overflow-hidden px-6">
         <div className="relative h-full max-w-7xl mx-auto px-6 overflow-hidden rounded-40px rounded-tr-none">
           <div className="absolute inset-0 w-[120%] -translate-x-1/2 animate-float-x">
             <img
@@ -175,7 +171,7 @@ export default function Home() {
       />
 
       {/* Venue grid */}
-      <section id="venue-section" className="max-w-7xl mx-auto mt-12 px-6">
+      <section id="venue-section" className="max-w-7xl mx-auto mt-12 bg-lightgray p-4">
         {loading && (
           <div className="text-center font-alexandria text-blackish text-lg">
             Loading venues...
