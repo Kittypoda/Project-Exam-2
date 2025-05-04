@@ -20,7 +20,7 @@ export default function SearchBar({ onSearch, onClear, isSearching }) {
   }
 
   return (
-    <div className="max-w-7xl mx-auto mt-8">
+    <div className="max-w-7xl mx-auto mt-8 px-6">
       <form
         onSubmit={handleSubmit}
         className="flex flex-wrap items-end gap-4"
