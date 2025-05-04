@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Husk å ha React Router satt opp
+import { useNavigate } from "react-router-dom"; 
 
 const BASE_URL = "https://v2.api.noroff.dev";
 
@@ -8,7 +8,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const navigate = useNavigate(); // For redirect etter login
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -31,19 +31,17 @@ export default function Login() {
         throw new Error(data.errors?.[0]?.message || "Login failed");
       }
 
-      // ✅ Hent token og navn fra riktig sted i v2
       const { accessToken, name } = data.data;
 
       if (!accessToken || !name) {
         throw new Error("Unexpected API response");
       }
 
-      // Lagre data i localStorage
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("userName", name);
 
       setSuccess("Login successful! Redirecting...");
-      setTimeout(() => navigate("/profile"), 1000); // Redirect etter 1 sek
+      setTimeout(() => navigate("/profile"), 1000);
     } catch (err) {
       console.error("Login error:", err);
       setError(err.message || "Something went wrong");

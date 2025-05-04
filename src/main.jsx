@@ -8,6 +8,7 @@ import './index.css';
 import Register from './pages/Register';
 import Avenue from './pages/AvenuePage';
 import ManagerLogin from './pages/ManagerLogin';
+import Profile from './pages/Profile';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -21,6 +22,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
            <Route path="managerlogin" element={<ManagerLogin />}
            />
             <Route path="avenue" element={<Avenue />}
+           />
+           <Route path="profile" element={<Profile />}
            />
         </Route>
       </Routes>
