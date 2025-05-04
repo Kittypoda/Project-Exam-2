@@ -1,8 +1,6 @@
 import fallbackImage from '../assets/fallback.png'; 
 
 export default function VenueCard({ venue }) {
-  console.log("VENUE:", venue.name);
-  console.log("MEDIA:", venue.media);
 
   const hasMedia = Array.isArray(venue.media) && venue.media.length > 0;
   const imageUrl = hasMedia ? venue.media[0]?.url : null;
