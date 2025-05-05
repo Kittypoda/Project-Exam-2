@@ -101,77 +101,84 @@ export default function Profile() {
     return <p className="text-center mt-8">Loading profile...</p>;
   }
 
+  const displayName = profile?.name
+  ? profile.name.charAt(0).toUpperCase() + profile.name.slice(1)
+  : "";
+
+
   return (
-    <div className="max-w-md mx-auto text-center mt-12 space-y-4">
+    <div className="max-w-md mx-auto text-center mt-12 p-10">
       <img
         src={profile.avatar?.url || "https://placehold.co/150x150?text=Avatar"}
         alt={profile.avatar?.alt || "Avatar"}
         className="w-32 h-32 mx-auto rounded-full object-cover border"
       />
 
-      <h1 className="text-xl font-bold">{profile.name}</h1>
+    <h1 className="text-xl pt-2">{displayName}</h1>
 
-      <p className="text-gray-700">
-        {profile.bio || <span className="italic text-gray-400">No bio added yet.</span>}
+
+      <p className="text-gray-700 pt-2 pb-6">
+        {profile.bio || <span className="">No bio added yet.</span>}
       </p>
 
       <button
         onClick={() => setIsModalOpen(true)}
-        className="mt-4 bg-blue-600 text-white py-2 px-4 rounded"
+        className="btn btn-primary w-full"
       >
         Edit profile
       </button>
 
       {/* Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg max-w-sm w-full space-y-4 shadow-lg">
-            <h2 className="text-lg font-semibold">Edit Profile</h2>
+  <div className="fixed inset-0 bg-black bg-opacity-20 flex items-center justify-center z-50">
+    <div className="bg-white p-6 rounded-xl max-w-xl w-full space-y-4 shadow-lg">
+      <div className="flex justify-end">
+        <button onClick={() => setIsModalOpen(false)} className="text-sm font-alexandria">
+          Close
+        </button>
+      </div>
 
-            <form onSubmit={handleUpdate} className="space-y-4">
-              <div>
-                <label className="block font-medium">Avatar URL</label>
-                <input
-                  type="url"
-                  value={avatarUrl}
-                  onChange={(e) => setAvatarUrl(e.target.value)}
-                  className="w-full border p-2 rounded"
-                  placeholder="https://..."
-                />
-              </div>
+      {/* Avatar preview */}
+      
+      {avatarUrl ? (
+  <img
+    src={avatarUrl}
+    alt="Avatar preview"
+    className="w-24 h-24 mx-auto rounded-full object-cover bg-lightgray text-lightgray"
+  />
+) : (
+  <div className="w-24 h-24 mx-auto rounded-full bg-lightgray" />
+)}
 
-              <div>
-                <label className="block font-medium">Bio</label>
-                <textarea
-                  value={bio}
-                  onChange={(e) => setBio(e.target.value)}
-                  className="w-full border p-2 rounded"
-                  rows="3"
-                  placeholder="Write something about yourself..."
-                />
-              </div>
 
-              <div className="flex justify-between items-center">
-                <button
-                  type="button"
-                  onClick={() => setIsModalOpen(false)}
-                  className="text-gray-600 hover:underline"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="bg-green-600 text-white py-1 px-4 rounded"
-                >
-                  Save
-                </button>
-              </div>
+      <form onSubmit={handleUpdate} className="space-y-4 px-20 pb-20">
+        <input
+          type="url"
+          value={avatarUrl}
+          onChange={(e) => setAvatarUrl(e.target.value)}
+          className="w-full text-sm font-alexandria font-light p-4 rounded-xl shadow-md"
+          placeholder="New image link"
+        />
 
-              {status && <p className="text-sm text-green-700">{status}</p>}
-            </form>
-          </div>
-        </div>
-      )}
+        <textarea
+          value={bio}
+          onChange={(e) => setBio(e.target.value)}
+          className="w-full h-40 text-sm font-alexandria font-light p-4 rounded-xl shadow-md"
+          rows="3"
+          placeholder="Write something about yourself..."
+        />
+
+        <button
+          type="submit"
+          className="btn btn-primary w-full"
+        >
+          Save changes
+        </button>
+      </form>
+    </div>
+  </div>
+)}
+
     </div>
   );
 }
