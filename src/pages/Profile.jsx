@@ -85,6 +85,7 @@ export default function Profile() {
       }
 
       setProfile(data.data);
+      localStorage.setItem("avatarUrl", data.data.avatar?.url || "");
       setStatus("Profile updated!");
       setIsModalOpen(false);
     } catch (err) {

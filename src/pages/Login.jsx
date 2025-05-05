@@ -30,15 +30,16 @@ export default function Login() {
       if (!response.ok) {
         throw new Error(data.errors?.[0]?.message || "Login failed");
       }
-
-      const { accessToken, name } = data.data;
+      const { accessToken, name, avatar } = data.data;
 
       if (!accessToken || !name) {
         throw new Error("Unexpected API response");
       }
-
+      
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("userName", name);
+      localStorage.setItem("avatarUrl", avatar?.url || ""); 
+      
 
       setSuccess("Login successful! Redirecting...");
       setTimeout(() => navigate("/profile"), 1000);
@@ -76,7 +77,6 @@ export default function Login() {
       </button>
 
       {error && <p className="text-red-600">{error}</p>}
-      {success && <p className="text-green-600">{success}</p>}
     </form>
   );
 }
