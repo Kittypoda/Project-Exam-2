@@ -1,46 +1,45 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import loginImg from "../assets/snowcabin.png";
+import registerImg from "../assets/poolwoman.png";
 
-const BASE_URL = "https://v2.api.noroff.dev";
+const API_URL = "https://v2.api.noroff.dev";
 
-export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+export default function ManagerRegister() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    venueManager: true, 
+  });
+
   const [error, setError] = useState("");
   const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
     try {
-      const response = await fetch(`${BASE_URL}/auth/login`, {
+      const response = await fetch(`${API_URL}/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify(formData),
       });
 
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.errors?.[0]?.message || "Login failed");
+        throw new Error(data.errors?.[0]?.message || "Registration failed");
       }
 
-      const { accessToken, name, avatar } = data.data;
-
-      if (!accessToken || !name) {
-        throw new Error("Unexpected API response");
-      }
-
-      localStorage.setItem("accessToken", accessToken);
-      localStorage.setItem("userName", name);
-      localStorage.setItem("avatarUrl", avatar?.url || "");
-
-      navigate("/profile");
+      navigate("/managerlogin");
     } catch (err) {
-      console.error("Login error:", err);
+      console.error("Register error:", err);
       setError(err.message || "Something went wrong");
     }
   };
@@ -54,21 +53,30 @@ export default function Login() {
           className="w-full max-w-md flex flex-col"
         >
           <h1 className="font-alexandria font-semibold p-2 text-center">
-            Log in
+            Become a venue manager
           </h1>
           <h2 className="text-center p-2">
-            New here?{" "}
-            <Link to="/register" className="underline text-underline">
-              Register an account
+            Already registered?{" "}
+            <Link to="/managerlogin" className="underline text-underline">
+              Log in here
             </Link>
           </h2>
 
           <input
+            type="text"
+            name="name"
+            placeholder="Username"
+            value={formData.name}
+            onChange={handleChange}
+            required
+            className="form-input my-4"
+          />
+          <input
             type="email"
             name="email"
             placeholder="example@stud.noroff.no"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={formData.email}
+            onChange={handleChange}
             required
             className="form-input my-4"
           />
@@ -76,39 +84,37 @@ export default function Login() {
             type="password"
             name="password"
             placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={formData.password}
+            onChange={handleChange}
             required
             className="form-input my-4"
           />
 
           <button type="submit" className="btn btn-primary w-full">
-            Login
+            Register as manager
           </button>
 
           {error && <p className="text-red-600 text-sm mt-2">{error}</p>}
 
           <div className="font-alexandria font-light mt-10">
-          Turn your special spot into someone’s stay.
+          A bed for every adventure 
           </div>
           <button className="btn btn-secondary mt-4">
-            <Link to="/managerlogin">Log in as a venue manager</Link>
-          </button>
+          <Link to="/login">
+              Go to traveler login
+            </Link>
+            </button>
         </form>
       </div>
 
       {/* Right side: image (hidden on mobile) */}
       <div className="hidden px-6 pb-40 lg:block">
         <img
-          src={loginImg}
-          alt="Login visual"
+          src={registerImg}
+          alt="Registration"
           className="w-full max-h-[900px] min-h-[800px] object-cover rounded-2xl rounded-tr-none"
         />
       </div>
     </div>
   );
 }
-
-
-
-

@@ -9,6 +9,7 @@ import Register from './pages/Register';
 import Avenue from './pages/AvenuePage';
 import ManagerLogin from './pages/ManagerLogin';
 import Profile from './pages/Profile';
+import ManagerRegister from './pages/ManagerRegister';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -19,7 +20,10 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />}
            />
+           <Route path="managerregister" element={<ManagerRegister />} />
            <Route path="managerlogin" element={<ManagerLogin />}
+           />
+           <Route path="manager" element={<ManagerLogin />}
            />
             <Route path="avenue" element={<Avenue />}
            />
