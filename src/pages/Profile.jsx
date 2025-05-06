@@ -118,7 +118,7 @@ export default function Profile() {
     <h1 className="text-xl pt-2">{displayName}</h1>
 
 
-      <p className="text-gray-700 pt-2 pb-6">
+      <p className="text-sm pt-2 pb-6">
         {profile.bio || <span className="">No bio added yet.</span>}
       </p>
 
@@ -157,14 +157,14 @@ export default function Profile() {
           type="url"
           value={avatarUrl}
           onChange={(e) => setAvatarUrl(e.target.value)}
-          className="w-full text-sm font-alexandria font-light p-4 rounded-xl shadow-md"
+          className="form-input"
           placeholder="New image link"
         />
 
         <textarea
           value={bio}
           onChange={(e) => setBio(e.target.value)}
-          className="w-full h-40 text-sm font-alexandria font-light p-4 rounded-xl shadow-md"
+          className="form-input h-40"
           rows="3"
           placeholder="Write something about yourself..."
         />

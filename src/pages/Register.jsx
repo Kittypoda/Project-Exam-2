@@ -1,4 +1,6 @@
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import registerImg from "../assets/poolwoman.png";
 
 const API_URL = "https://v2.api.noroff.dev";
 
@@ -7,11 +9,11 @@ export default function Register() {
     name: "",
     email: "",
     password: "",
-    venueManager: false, // Reisende
+    venueManager: false,
   });
 
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -20,7 +22,6 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    setSuccess("");
 
     try {
       const response = await fetch(`${API_URL}/auth/register`, {
@@ -32,13 +33,11 @@ export default function Register() {
       });
 
       const data = await response.json();
-      console.log("Register response (v2):", data);
-
       if (!response.ok) {
         throw new Error(data.errors?.[0]?.message || "Registration failed");
       }
 
-      setSuccess("Registration successful! You can now log in.");
+      navigate("/login");
     } catch (err) {
       console.error("Register error:", err);
       setError(err.message || "Something went wrong");
@@ -46,44 +45,74 @@ export default function Register() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-md mx-auto space-y-4">
-      <h2 className="text-xl font-semibold">Register as a traveler</h2>
+    <div className="min-h-screen grid grid-cols-1 lg:grid-cols-[2fr_3fr]">
+      {/* Left side: form */}
+      <div className="flex justify-center px-8 py-40">
+        <form
+          onSubmit={handleSubmit}
+          className="w-full max-w-md flex flex-col"
+        >
+          <h1 className="font-alexandria font-semibold p-2 text-center">
+            Sign up
+          </h1>
+          <h2 className="text-center p-2">
+            Already a user?{" "}
+            <Link to="/login" className="underline text-underline">
+              Log in here
+            </Link>
+          </h2>
 
-      <input
-        type="text"
-        name="name"
-        placeholder="Username"
-        value={formData.name}
-        onChange={handleChange}
-        required
-        className="w-full border p-2 rounded"
-      />
-      <input
-        type="email"
-        name="email"
-        placeholder="you@stud.noroff.no"
-        value={formData.email}
-        onChange={handleChange}
-        required
-        className="w-full border p-2 rounded"
-      />
-      <input
-        type="password"
-        name="password"
-        placeholder="Password"
-        value={formData.password}
-        onChange={handleChange}
-        required
-        className="w-full border p-2 rounded"
-      />
+          <input
+            type="text"
+            name="name"
+            placeholder="Username"
+            value={formData.name}
+            onChange={handleChange}
+            required
+            className="form-input my-4"
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="example@stud.noroff.no"
+            value={formData.email}
+            onChange={handleChange}
+            required
+            className="form-input my-4"
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+            className="form-input my-4"
+          />
 
-      <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded">
-        Register
-      </button>
+          <button type="submit" className="btn btn-primary w-full">
+            Register
+          </button>
 
-      {error && <p className="text-red-600">{error}</p>}
-      {success && <p className="text-green-600">{success}</p>}
-    </form>
+          {error && <p className="text-red-600 text-sm">{error}</p>}
+          <div className="font-alexandria font-light mt-10 ">Turn your special spot into someone’s stay</div>
+          <button className="btn btn-secondary mt-4">
+          <Link to="/managerregister">
+              Become a venue manager
+            </Link>
+            </button>
+        </form>
+      </div>
+      
+
+      {/* Right side: image (hidden on mobile) */}
+      <div className="hidden px-6 pb-40 lg:block">
+        <img
+          src={registerImg}
+          alt="Registration"
+          className="w-full max-h-[900px] min-h-[800px] object-cover rounded-2xl rounded-tr-none "
+        />
+      </div>
+    </div>
   );
 }
-

@@ -8,8 +8,14 @@ export default function Header() {
 
   const isLoggedIn = !!localStorage.getItem("accessToken");
   const avatarUrl = localStorage.getItem("avatarUrl");
-  const userName = localStorage.getItem("userName");
   const isOnProfilePage = location.pathname === "/profile";
+
+  const isAuthPage = [
+    "/login",
+    "/register",
+    "/managerlogin",
+    "/managerregister"
+  ].includes(location.pathname);
 
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
@@ -26,49 +32,54 @@ export default function Header() {
         </Link>
 
         {/* Desktop nav */}
-        <nav className="hidden md:flex gap-4 items-center">
-          {!isLoggedIn && (
-            <>
-              <Link to="/register" className="text-base pt-2 font-medium">Register</Link>
-              <Link to="/login" className="btn btn-primary">Login</Link>
-            </>
-          )}
+        {!isAuthPage && (
+          <nav className="hidden md:flex gap-4 items-center">
+            {!isLoggedIn && (
+              <>
+                <Link to="/register" className="text-base pt-2 font-medium">Register</Link>
+                <Link to="/login" className="btn btn-primary">Login</Link>
+              </>
+            )}
 
-          {isLoggedIn && !isOnProfilePage && (
-            <Link to="/profile">
-              {avatarUrl ? (
-                <img
-                  src={avatarUrl}
-                  alt="Profile avatar"
-                  className="w-12 h-12 rounded-full object-cover"
-                />
-              ) : (
-                <div className="w-12 h-12 rounded-full bg-lightgray text-lightgray" />
-              )}
+            {isLoggedIn && !isOnProfilePage && (
+              <Link to="/profile">
+                {avatarUrl ? (
+                  <img
+                    src={avatarUrl}
+                    alt="Profile avatar"
+                    className="w-12 h-12 rounded-full object-cover"
+                  />
+                ) : (
+                  <div className="w-12 h-12 rounded-full bg-lightgray text-lightgray" />
+                )}
+              </Link>
+            )}
+
+            {isLoggedIn && isOnProfilePage && (
+              <button onClick={handleLogout} className="btn btn-secondary">
+                Log out
+              </button>
+            )}
+
+            <Link to="/managerlogin" className="btn btn-secondary">
+              Venue Manager
             </Link>
-          )}
-
-          {isLoggedIn && isOnProfilePage && (
-            <button onClick={handleLogout} className="btn btn-secondary">
-              Log out
-            </button>
-          )}
-
-          {/* Venue Manager is always visible */}
-          <Link to="/managerlogin" className="btn btn-secondary">Venue Manager</Link>
-        </nav>
+          </nav>
+        )}
 
         {/* Mobile menu button */}
-        <button
-          className="md:hidden btn btn-primary"
-          onClick={() => setMenuOpen(true)}
-        >
-          Menu
-        </button>
+        {!isAuthPage && (
+          <button
+            className="md:hidden btn btn-primary"
+            onClick={() => setMenuOpen(true)}
+          >
+            Menu
+          </button>
+        )}
       </div>
 
       {/* Mobile full screen menu */}
-      {menuOpen && (
+      {menuOpen && !isAuthPage && (
         <div className="fixed inset-0 bg-white z-50 flex flex-col items-center p-6">
           <button
             className="self-end text-sm font-alexandria mb-8"
