@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import loginImg from "../assets/snowcabin.png";
 
 const BASE_URL = "https://v2.api.noroff.dev";
+const API_KEY = "96ad7b42-c2fc-4679-b557-4401dcf0e962";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -34,11 +35,28 @@ export default function Login() {
         throw new Error("Unexpected API response");
       }
 
+      // Fetch profile to determine role
+      const profileResponse = await fetch(`${BASE_URL}/holidaze/profiles/${name}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "X-Noroff-API-Key": API_KEY,
+        },
+      });
+
+      const profileData = await profileResponse.json();
+      if (!profileResponse.ok) {
+        throw new Error(profileData.errors?.[0]?.message || "Failed to fetch profile");
+      }
+
+      const isManager = profileData.data.venueManager;
+
+      // Store login info
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("userName", name);
       localStorage.setItem("avatarUrl", avatar?.url || "");
 
-      navigate("/profile");
+      // Redirect to correct profile page
+      navigate(isManager ? "/managerprofile" : "/profile");
     } catch (err) {
       console.error("Login error:", err);
       setError(err.message || "Something went wrong");
@@ -89,10 +107,11 @@ export default function Login() {
           {error && <p className="text-red-600 text-sm mt-2">{error}</p>}
 
           <div className="font-alexandria font-light mt-10">
-          Turn your special spot into someone’s stay.
+            Turn your special spot into someone’s stay.
           </div>
+
           <button className="btn btn-secondary mt-4">
-            <Link to="/managerlogin">Log in as a venue manager</Link>
+            <Link to="/managerregister">Become a venue manager</Link>
           </button>
         </form>
       </div>
@@ -108,6 +127,7 @@ export default function Login() {
     </div>
   );
 }
+
 
 
 
