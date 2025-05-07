@@ -1,3 +1,34 @@
+@import url('https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&family=Racing+Sans+One&display=swap');
+
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+.btn {
+  @apply px-9 py-4 rounded-md font-alexandria text-sm text-white shadow-lg transition;
+}
+
+.btn-primary {
+  @apply bg-dustygreen hover:bg-mintgreen hover:text-blackish;
+}
+
+.btn-secondary {
+  @apply bg-blackish text-white hover:bg-mintgreen hover:text-blackish;
+}
+
+h1 {
+  @apply font-alexandria font-semibold text-h1-mobile md:text-h1 text-black;
+}
+
+h2 {
+  @apply font-alexandria font-extralight text-h2 text-black;
+}
+
+p {
+  @apply font-alexandria font-light text-base text-black;
+}
+
+.form-input {
+  @apply w-full shadow-md p-4 rounded-md font-alexandria font-light text-sm placeholder-black border border-white focus:outline-none focus:ring-0 focus:border-dustygreen;;
+}

@@ -1,5 +1,15 @@
-function App() {
-  return <h1 className="text-2xl text-red-500 font-bold">Hello Holidaze 🌴</h1>
-}
+import { Outlet } from 'react-router-dom';
+import Header from './components/Header';
+import Footer from './components/Footer';
 
-export default App
+export default function App() {
+  return (
+    <>
+      <Header />
+      <main className="">
+        <Outlet />
+      </main>
+      <Footer />
+    </>
+  );
+}
