@@ -37,7 +37,7 @@ export default function ManagerRegister() {
         throw new Error(data.errors?.[0]?.message || "Registration failed");
       }
 
-      navigate("/managerlogin");
+      navigate("/login");
     } catch (err) {
       console.error("Register error:", err);
       setError(err.message || "Something went wrong");
