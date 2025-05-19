@@ -3,6 +3,14 @@ import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "../styles/datepicker.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faWifi,
+  faDog,
+  faParking,
+  faCoffee,
+} from "@fortawesome/free-solid-svg-icons";
+
 
 export default function VenuePage() {
   const { id } = useParams();
@@ -60,7 +68,8 @@ export default function VenuePage() {
   if (!venue) return null;
 
   return (
-    <div className="max-w-6xl mx-auto p-6 grid grid-cols-1 md:grid-cols-[3fr_2fr] gap-8">
+    <div className="max-w-6xl mx-auto p-6 grid grid-cols-1 md:grid-cols-[3fr_2fr] gap-8 pb-56 md:pb-0">
+
       {/* img carousel */}
       <div>
         {venue.media?.length > 0 && (
@@ -108,9 +117,10 @@ export default function VenuePage() {
         <p className="text-lg font-medium">{venue.maxGuests} Guests</p>
         <p className="text-lg font-medium">{venue.price} NOK / night</p>
 
-        <div className="pt-6 font-alexandria text-xl">Booking</div>
-        <div className="bg-lightgray text-center rounded-2xl shadow-xl px-2 py-10 md:static fixed bottom-0 left-0 right-0 z-10">
+        <div className="pt-6 font-alexandria text-xl hidden md:block">Booking</div>
+        <div className="bg-lightgray md:text-center rounded-2xl shadow-xl pl-10 py-5 md:py-10 md:py-10 md:px-2 md:static fixed bottom-0 left-0 right-0 z-10">
           <div className="max-w-6xl mx-auto">
+          <div className="font-alexandria  pb-4 text-xl text-left block md:hidden">Booking</div>
             <div className="grid grid-cols-3 font-alexandria">
               <div>
                 <label className="block text-md mb-1">Check in</label>
@@ -119,7 +129,7 @@ export default function VenuePage() {
                   onChange={(date) => setStartDate(date)}
                   excludeDates={bookedDates}
                   placeholderText="Add date"
-                  className="w-full bg-transparent text-center font-thin placeholder-black rounded-md"
+                  className="w-full bg-transparent md:text-center font-thin placeholder-black rounded-md"
                   minDate={new Date()}
                 />
               </div>
@@ -130,7 +140,7 @@ export default function VenuePage() {
                   onChange={(date) => setEndDate(date)}
                   excludeDates={bookedDates}
                   placeholderText="Add date"
-                  className="w-full bg-transparent text-center font-thin placeholder-black"
+                  className="w-full bg-transparent md:text-center font-thin placeholder-black"
                   minDate={startDate || new Date()}
                 />
               </div>
@@ -143,13 +153,13 @@ export default function VenuePage() {
                   value={guests}
                   onChange={(e) => setGuests(parseInt(e.target.value))}
                   placeholder="Add guests"
-                  className="bg-transparent text-center font-thin placeholder-black rounded-md w-20"
+                  className="bg-transparent md:text-center font-thin placeholder-black rounded-md w-20"
                 />
               </div>
             </div>
 
             <div className="mt-4 flex justify-center">
-              <button className="btn btn-primary w-40">
+              <button className="btn btn-primary w-40 mt-4">
                 Reserve
               </button>
             </div>
@@ -157,19 +167,38 @@ export default function VenuePage() {
         </div>
       </div>
 
-      {/* Fasiliteter + Beskrivelse */}
-      <div className="md:col-span-2 mt-8">
+      <div className="md:col-span-2">
         <h2 className="text-2xl font-semibold mb-2">Facilities</h2>
-        <ul className="list-disc list-inside mb-6">
-          {venue.meta.wifi && <li>Wifi</li>}
-          {venue.meta.pets && <li>Pets allowed</li>}
-          {venue.meta.parking && <li>Parking</li>}
-          {venue.meta.breakfast && <li>Breakfast</li>}
-        </ul>
+        <ul className="list-none mb-6 space-y-2">
+  {venue.meta.wifi && (
+    <li className="flex items-center gap-2 text-blackish">
+      <FontAwesomeIcon icon={faWifi} />
+      Wifi
+    </li>
+  )}
+  {venue.meta.pets && (
+    <li className="flex items-center gap-2 text-blackish">
+      <FontAwesomeIcon icon={faDog} />
+      Pets allowed
+    </li>
+  )}
+  {venue.meta.parking && (
+    <li className="flex items-center gap-2 text-blackish">
+      <FontAwesomeIcon icon={faParking} />
+      Parking
+    </li>
+  )}
+  {venue.meta.breakfast && (
+    <li className="flex items-center gap-2 text-blackish">
+      <FontAwesomeIcon icon={faCoffee} />
+      Breakfast
+    </li>
+  )}
+</ul>
 
         <h2 className="text-2xl font-semibold mb-2">About</h2>
         <p className="mb-4">{venue.description}</p>
-        <p className="text-md font-normal">
+        <p className="text-md font-normal pb-6">
           Hosted by {venue.owner?.name || "Unknown"}
         </p>
       </div>
