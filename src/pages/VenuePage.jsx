@@ -14,6 +14,7 @@ export default function VenuePage() {
   const [guests, setGuests] = useState(1);
   const [bookedDates, setBookedDates] = useState([]);
   const [currentImg, setCurrentImg] = useState(0);
+  const [touchStartX, setTouchStartX] = useState(0);
 
   useEffect(() => {
     async function fetchVenue() {
@@ -33,6 +34,14 @@ export default function VenuePage() {
     fetchVenue();
   }, [id]);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImg((prev) => (prev + 1) % (venue?.media?.length || 1));
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [venue]);
+
   function getDisabledDates(bookings) {
     const dates = [];
     bookings.forEach(({ dateFrom, dateTo }) => {
@@ -47,26 +56,44 @@ export default function VenuePage() {
   }
 
   if (loading) return <div className="text-center mt-12">Loading...</div>;
-  if (error) return <div className="text-center text-red-500 mt-12">Error: {error}</div>;
+  if (error) return <div className="text-center mt-12">Error: {error}</div>;
   if (!venue) return null;
 
   return (
-    <div className="max-w-6xl mx-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div className="max-w-6xl mx-auto p-6 grid grid-cols-1 md:grid-cols-[3fr_2fr] gap-8">
       {/* Bildekarusell */}
       <div>
         {venue.media?.length > 0 && (
-          <div className="relative">
+          <div
+            className="relative select-none"
+            onClick={() => setCurrentImg((prev) => (prev + 1) % venue.media.length)}
+            onTouchStart={(e) => setTouchStartX(e.touches[0].clientX)}
+            onTouchEnd={(e) => {
+              const touchEndX = e.changedTouches[0].clientX;
+              const diff = touchStartX - touchEndX;
+              if (Math.abs(diff) > 50) {
+                if (diff > 0) {
+                  setCurrentImg((prev) => (prev + 1) % venue.media.length);
+                } else {
+                  setCurrentImg((prev) => (prev - 1 + venue.media.length) % venue.media.length);
+                }
+              }
+            }}
+          >
             <img
               src={venue.media[currentImg].url}
               alt={venue.media[currentImg].alt || `Image ${currentImg + 1}`}
-              className="rounded-xl w-full h-96 object-cover"
+              className="rounded-xl w-full h-96 h-[27rem] object-cover cursor-pointer"
             />
             <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-2">
               {venue.media.map((_, i) => (
                 <button
                   key={i}
                   className={`w-3 h-3 rounded-full ${i === currentImg ? "bg-white" : "bg-gray-400"}`}
-                  onClick={() => setCurrentImg(i)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setCurrentImg(i);
+                  }}
                 ></button>
               ))}
             </div>
@@ -81,37 +108,47 @@ export default function VenuePage() {
         <p className="text-lg font-medium">{venue.maxGuests} Guests</p>
         <p className="text-lg font-medium">{venue.price} NOK / night</p>
 
-        <div className="pt-6 font-alexandria">Booking</div>
-        <div className="bg-lightgray rounded-xl shadow-md p-4 space-y-4">
-          <div className="flex flex-col gap-2 pt-4 font-alexandria">
-            <label className="text-sm">Check in</label>
-            <DatePicker
-              selected={startDate}
-              onChange={(date) => setStartDate(date)}
-              excludeDates={bookedDates}
-              placeholderText="Add date"
-              className="bg-lightgray font-thin placeholder-black w-full"
-              minDate={new Date()}
-            />
-            <label className="text-sm">Check out</label>
-            <DatePicker
-              selected={endDate}
-              onChange={(date) => setEndDate(date)}
-              excludeDates={bookedDates}
-              placeholderText="Add date"
-              className="bg-lightgray font-thin placeholder-black w-full"
-              minDate={startDate || new Date()}
-            />
-            <label className="text-sm">Guests</label>
-            <input
-              type="number"
-              min="1"
-              max={venue.maxGuests}
-              value={guests}
-              onChange={(e) => setGuests(parseInt(e.target.value))}
-              className="bg-lightgray font-thin placeholder-black w-full"
-            />
-            <button className="btn btn-primary">
+        <div className="pt-6 font-alexandria text-xl">Booking</div>
+        <div className="bg-lightgray text-center rounded-2xl shadow-md px-6 py-10">
+          <div className="grid grid-cols-1 md:grid-cols-3 font-alexandria">
+            <div>
+              <label className="block text-md mb-1">Check in</label>
+              <DatePicker
+                selected={startDate}
+                onChange={(date) => setStartDate(date)}
+                excludeDates={bookedDates}
+                placeholderText="Add date"
+                className="w-full bg-transparent text-center font-thin placeholder-black"
+                minDate={new Date()}
+              />
+            </div>
+            <div>
+              <label className="block text-md mb-1">Check out</label>
+              <DatePicker
+                selected={endDate}
+                onChange={(date) => setEndDate(date)}
+                excludeDates={bookedDates}
+                placeholderText="Add date"
+                className="w-full bg-transparent  text-center font-thin placeholder-black"
+                minDate={startDate || new Date()}
+              />
+            </div>
+            <div>
+              <label className="block text-md mb-1">Guests</label>
+              <input
+                type="number"
+                min="1"
+                max={venue.maxGuests}
+                value={guests}
+                onChange={(e) => setGuests(parseInt(e.target.value))}
+                placeholder="Add guests"
+                className="bg-transparent text-center font-thin placeholder-black"
+              />
+            </div>
+          </div>
+
+          <div className="mt-6 flex justify-center">
+            <button className="btn btn-primary w-40">
               Reserve
             </button>
           </div>
@@ -137,4 +174,5 @@ export default function VenuePage() {
     </div>
   );
 }
+
 

@@ -4,7 +4,7 @@
 @tailwind components;
 @tailwind utilities;
 .btn {
-  @apply px-9 py-4 rounded-md font-alexandria text-sm text-white shadow-lg transition;
+  @apply px-9 py-3 rounded-md font-alexandria text-sm text-white shadow-lg transition;
 }
 
 .btn-primary {
