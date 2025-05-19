@@ -61,7 +61,7 @@ export default function VenuePage() {
 
   return (
     <div className="max-w-6xl mx-auto p-6 grid grid-cols-1 md:grid-cols-[3fr_2fr] gap-8">
-      {/* Bildekarusell */}
+      {/* img carousel */}
       <div>
         {venue.media?.length > 0 && (
           <div
@@ -83,7 +83,7 @@ export default function VenuePage() {
             <img
               src={venue.media[currentImg].url}
               alt={venue.media[currentImg].alt || `Image ${currentImg + 1}`}
-              className="rounded-xl w-full h-96 h-[27rem] object-cover cursor-pointer"
+              className="rounded-xl w-full h-96 md:h-[27rem] object-cover cursor-pointer"
             />
             <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-2">
               {venue.media.map((_, i) => (
@@ -109,54 +109,56 @@ export default function VenuePage() {
         <p className="text-lg font-medium">{venue.price} NOK / night</p>
 
         <div className="pt-6 font-alexandria text-xl">Booking</div>
-        <div className="bg-lightgray text-center rounded-2xl shadow-md px-6 py-10">
-          <div className="grid grid-cols-1 md:grid-cols-3 font-alexandria">
-            <div>
-              <label className="block text-md mb-1">Check in</label>
-              <DatePicker
-                selected={startDate}
-                onChange={(date) => setStartDate(date)}
-                excludeDates={bookedDates}
-                placeholderText="Add date"
-                className="w-full bg-transparent text-center font-thin placeholder-black"
-                minDate={new Date()}
-              />
+        <div className="bg-lightgray text-center rounded-2xl shadow-xl px-2 py-10 md:static fixed bottom-0 left-0 right-0 z-10">
+          <div className="max-w-6xl mx-auto">
+            <div className="grid grid-cols-3 font-alexandria">
+              <div>
+                <label className="block text-md mb-1">Check in</label>
+                <DatePicker
+                  selected={startDate}
+                  onChange={(date) => setStartDate(date)}
+                  excludeDates={bookedDates}
+                  placeholderText="Add date"
+                  className="w-full bg-transparent text-center font-thin placeholder-black rounded-md"
+                  minDate={new Date()}
+                />
+              </div>
+              <div>
+                <label className="block text-md mb-1">Check out</label>
+                <DatePicker
+                  selected={endDate}
+                  onChange={(date) => setEndDate(date)}
+                  excludeDates={bookedDates}
+                  placeholderText="Add date"
+                  className="w-full bg-transparent text-center font-thin placeholder-black"
+                  minDate={startDate || new Date()}
+                />
+              </div>
+              <div>
+                <label className="block text-md mb-1">Guests</label>
+                <input
+                  type="number"
+                  min="1"
+                  max={venue.maxGuests}
+                  value={guests}
+                  onChange={(e) => setGuests(parseInt(e.target.value))}
+                  placeholder="Add guests"
+                  className="bg-transparent text-center font-thin placeholder-black rounded-md w-20"
+                />
+              </div>
             </div>
-            <div>
-              <label className="block text-md mb-1">Check out</label>
-              <DatePicker
-                selected={endDate}
-                onChange={(date) => setEndDate(date)}
-                excludeDates={bookedDates}
-                placeholderText="Add date"
-                className="w-full bg-transparent  text-center font-thin placeholder-black"
-                minDate={startDate || new Date()}
-              />
-            </div>
-            <div>
-              <label className="block text-md mb-1">Guests</label>
-              <input
-                type="number"
-                min="1"
-                max={venue.maxGuests}
-                value={guests}
-                onChange={(e) => setGuests(parseInt(e.target.value))}
-                placeholder="Add guests"
-                className="bg-transparent text-center font-thin placeholder-black"
-              />
-            </div>
-          </div>
 
-          <div className="mt-6 flex justify-center">
-            <button className="btn btn-primary w-40">
-              Reserve
-            </button>
+            <div className="mt-4 flex justify-center">
+              <button className="btn btn-primary w-40">
+                Reserve
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Fasiliteter + Beskrivelse */}
-      <div className="col-span-2 mt-8">
+      <div className="md:col-span-2 mt-8">
         <h2 className="text-2xl font-semibold mb-2">Facilities</h2>
         <ul className="list-disc list-inside mb-6">
           {venue.meta.wifi && <li>Wifi</li>}
@@ -167,12 +169,13 @@ export default function VenuePage() {
 
         <h2 className="text-2xl font-semibold mb-2">About</h2>
         <p className="mb-4">{venue.description}</p>
-        <p className="text-sm text-gray-500 font-semibold">
+        <p className="text-md font-normal">
           Hosted by {venue.owner?.name || "Unknown"}
         </p>
       </div>
     </div>
   );
 }
+
 
 
