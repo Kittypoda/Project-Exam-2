@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
-
-const BASE_URL = "https://v2.api.noroff.dev";
-const API_KEY = "96ad7b42-c2fc-4679-b557-4401dcf0e962"; 
+import { API_KEY, BASE_URL } from "../utils/api";
 
 export default function Profile() {
   const userName = localStorage.getItem("userName");

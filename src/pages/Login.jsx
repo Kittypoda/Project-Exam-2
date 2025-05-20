@@ -1,9 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import loginImg from "../assets/snowcabin.png";
-
-const BASE_URL = "https://v2.api.noroff.dev";
-const API_KEY = "96ad7b42-c2fc-4679-b557-4401dcf0e962";
+import { API_KEY, BASE_URL } from "../utils/api";
 
 export default function Login() {
   const [email, setEmail] = useState("");
