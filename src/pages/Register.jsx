@@ -97,7 +97,7 @@ export default function Register() {
           {error && <p className="text-red-600 text-sm">{error}</p>}
           <div className="font-alexandria font-light mt-10 ">Turn your special spot into someone’s stay</div>
           <button className="btn btn-secondary mt-4">
-          <Link to="/managerregister">
+          <Link to="/login">
               Become a venue manager
             </Link>
             </button>

@@ -1,4 +1,5 @@
-import fallbackImage from '../assets/fallback.png'; 
+import { Link } from "react-router-dom";
+import fallbackImage from "../assets/fallback.png";
 
 export default function VenueCard({ venue }) {
   const hasMedia = Array.isArray(venue.media) && venue.media.length > 0;
@@ -7,29 +8,32 @@ export default function VenueCard({ venue }) {
   const location = venue.location?.city || venue.location?.country || "Unknown";
 
   return (
-    <div className="p-4 flex flex-col">
-      <img
-        src={imageUrl || fallbackImage}
-        alt={alt}
-        className="w-full h-64 object-cover rounded-xl mb-4"
-      />
+    <Link to={`/venue/${venue.id}`} className="block">
+      <div className="p-4 flex flex-col bg-transparent hover:shadow-lg rounded-xl transition-shadow hover:bg-white">
+        <img
+          src={imageUrl || fallbackImage}
+          alt={alt}
+          className="w-full h-64 object-cover rounded-xl mb-4"
+        />
 
-      {/* Venue name */}
-      <div className="font-alexandria text-black text-lg truncate">
-        {venue.name}
+        {/* Venue name */}
+        <div className="font-alexandria text-black text-lg truncate">
+          {venue.name}
+        </div>
+
+        {/* Location always visible */}
+        <div className="font-alexandria text-black text-sm truncate">
+          {location}
+        </div>
+
+        <p className="text-sm font-extralight mt-auto">
+          {venue.price} kr / night
+        </p>
       </div>
-
-      {/* Location always visible */}
-      <div className="font-alexandria text-black text-sm truncate">
-        {location}
-      </div>
-
-      <p className="text-sm font-extralight mt-auto">
-        {venue.price} kr / night
-      </p>
-    </div>
+    </Link>
   );
 }
+
 
 
 

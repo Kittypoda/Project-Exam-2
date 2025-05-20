@@ -37,7 +37,7 @@ export default function ManagerRegister() {
         throw new Error(data.errors?.[0]?.message || "Registration failed");
       }
 
-      navigate("/managerlogin");
+      navigate("/login");
     } catch (err) {
       console.error("Register error:", err);
       setError(err.message || "Something went wrong");
@@ -57,7 +57,7 @@ export default function ManagerRegister() {
           </h1>
           <h2 className="text-center p-2">
             Already registered?{" "}
-            <Link to="/managerlogin" className="underline text-underline">
+            <Link to="/login" className="underline text-underline">
               Log in here
             </Link>
           </h2>

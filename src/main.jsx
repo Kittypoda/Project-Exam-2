@@ -6,7 +6,7 @@ import Home from './pages/home';
 import Login from './pages/Login';
 import './index.css';
 import Register from './pages/Register';
-import Avenue from './pages/AvenuePage';
+import Venue from './pages/VenuePage';
 import ManagerLogin from './pages/ManagerLogin';
 import Profile from './pages/Profile';
 import ManagerRegister from './pages/ManagerRegister';
@@ -25,8 +25,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
            />
            <Route path="manager" element={<ManagerLogin />}
            />
-            <Route path="avenue" element={<Avenue />}
-           />
+            <Route path="venue/:id" element={<Venue />} />
+
            <Route path="profile" element={<Profile />}
            />
         </Route>
