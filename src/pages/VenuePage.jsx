@@ -10,7 +10,8 @@ import {
   faParking,
   faCoffee,
 } from "@fortawesome/free-solid-svg-icons";
-
+import ModalShell from "../components/ModalShell";
+import { BASE_URL, API_KEY } from "../utils/api";
 
 export default function VenuePage() {
   const { id } = useParams();
@@ -24,10 +25,22 @@ export default function VenuePage() {
   const [currentImg, setCurrentImg] = useState(0);
   const [touchStartX, setTouchStartX] = useState(0);
 
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [nights, setNights] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0);
+
   useEffect(() => {
     async function fetchVenue() {
       try {
-        const response = await fetch(`https://v2.api.noroff.dev/holidaze/venues/${id}?_bookings=true&_owner=true`);
+        const response = await fetch(
+          `${BASE_URL}/holidaze/venues/${id}?_bookings=true&_owner=true`,
+          {
+            headers: {
+              "X-Noroff-API-Key": API_KEY,
+            },
+          }
+        );
         if (!response.ok) throw new Error("Venue not found");
         const data = await response.json();
         setVenue(data.data);
@@ -46,7 +59,6 @@ export default function VenuePage() {
     const interval = setInterval(() => {
       setCurrentImg((prev) => (prev + 1) % (venue?.media?.length || 1));
     }, 5000);
-
     return () => clearInterval(interval);
   }, [venue]);
 
@@ -63,14 +75,60 @@ export default function VenuePage() {
     return dates;
   }
 
+  function handleInitialReserve() {
+    if (!startDate || !endDate || !guests || !venue?.id) {
+      alert("Please fill in all fields");
+      return;
+    }
+
+    const diff = endDate - startDate;
+    const calculatedNights = Math.ceil(diff / (1000 * 60 * 60 * 24));
+    setNights(calculatedNights);
+    setTotalPrice(calculatedNights * venue.price);
+    setShowConfirmModal(true);
+  }
+
+  async function handleBookingConfirm() {
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      alert("You must be logged in to book.");
+      return;
+    }
+
+    try {
+      const response = await fetch(`${BASE_URL}/holidaze/bookings`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+          "X-Noroff-API-Key": API_KEY,
+        },
+        body: JSON.stringify({
+          dateFrom: startDate.toISOString(),
+          dateTo: endDate.toISOString(),
+          guests,
+          venueId: venue.id,
+        }),
+      });
+
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.errors?.[0]?.message || "Booking failed");
+
+      setShowConfirmModal(false);
+      setShowSuccessModal(true);
+    } catch (err) {
+      console.error("Booking error:", err);
+      alert(`Booking failed: ${err.message}`);
+    }
+  }
+
   if (loading) return <div className="text-center mt-12">Loading...</div>;
   if (error) return <div className="text-center mt-12">Error: {error}</div>;
   if (!venue) return null;
 
   return (
     <div className="max-w-6xl mx-auto p-6 grid grid-cols-1 md:grid-cols-[3fr_2fr] gap-8 pb-56 md:pb-0">
-
-      {/* img carousel */}
+      {/* Image Carousel */}
       <div>
         {venue.media?.length > 0 && (
           <div
@@ -110,7 +168,7 @@ export default function VenuePage() {
         )}
       </div>
 
-      {/* Info + booking */}
+      {/* Info + Booking */}
       <div className="flex flex-col gap-2 pt-6">
         <h1 className="text-2xl font-medium">{venue.name}</h1>
         <h2>{venue.location.city}, {venue.location.country}</h2>
@@ -118,9 +176,9 @@ export default function VenuePage() {
         <p className="text-lg font-medium">{venue.price} NOK / night</p>
 
         <div className="pt-6 font-alexandria text-xl hidden md:block">Booking</div>
-        <div className="bg-lightgray md:text-center rounded-2xl shadow-xl pl-10 py-5 md:py-10 md:py-10 md:px-2 md:static fixed bottom-0 left-0 right-0 z-10">
+        <div className="bg-lightgray md:text-center rounded-2xl shadow-xl pl-10 py-5 md:py-10 md:px-2 md:static fixed bottom-0 left-0 right-0 z-10">
           <div className="max-w-6xl mx-auto">
-          <div className="font-alexandria  pb-4 text-xl text-left block md:hidden">Booking</div>
+            <div className="font-alexandria pb-4 text-xl text-left block md:hidden">Booking</div>
             <div className="grid grid-cols-3 font-alexandria">
               <div>
                 <label className="block text-md mb-1">Check in</label>
@@ -159,7 +217,7 @@ export default function VenuePage() {
             </div>
 
             <div className="mt-4 flex justify-center">
-              <button className="btn btn-primary w-40 mt-4">
+              <button onClick={handleInitialReserve} className="btn btn-primary w-40 mt-4">
                 Reserve
               </button>
             </div>
@@ -167,44 +225,49 @@ export default function VenuePage() {
         </div>
       </div>
 
+      {/* Facilities + Description */}
       <div className="md:col-span-2">
         <h2 className="text-2xl font-semibold mb-2">Facilities</h2>
         <ul className="list-none mb-6 space-y-2">
-  {venue.meta.wifi && (
-    <li className="flex items-center gap-2 text-blackish">
-      <FontAwesomeIcon icon={faWifi} />
-      Wifi
-    </li>
-  )}
-  {venue.meta.pets && (
-    <li className="flex items-center gap-2 text-blackish">
-      <FontAwesomeIcon icon={faDog} />
-      Pets allowed
-    </li>
-  )}
-  {venue.meta.parking && (
-    <li className="flex items-center gap-2 text-blackish">
-      <FontAwesomeIcon icon={faParking} />
-      Parking
-    </li>
-  )}
-  {venue.meta.breakfast && (
-    <li className="flex items-center gap-2 text-blackish">
-      <FontAwesomeIcon icon={faCoffee} />
-      Breakfast
-    </li>
-  )}
-</ul>
-
+          {venue.meta.wifi && <li className="flex items-center gap-2 text-blackish"><FontAwesomeIcon icon={faWifi} /> Wifi</li>}
+          {venue.meta.pets && <li className="flex items-center gap-2 text-blackish"><FontAwesomeIcon icon={faDog} /> Pets allowed</li>}
+          {venue.meta.parking && <li className="flex items-center gap-2 text-blackish"><FontAwesomeIcon icon={faParking} /> Parking</li>}
+          {venue.meta.breakfast && <li className="flex items-center gap-2 text-blackish"><FontAwesomeIcon icon={faCoffee} /> Breakfast</li>}
+        </ul>
         <h2 className="text-2xl font-semibold mb-2">About</h2>
         <p className="mb-4">{venue.description}</p>
-        <p className="text-md font-normal pb-6">
-          Hosted by {venue.owner?.name || "Unknown"}
-        </p>
+        <p className="text-md font-normal pb-6">Hosted by {venue.owner?.name || "Unknown"}</p>
       </div>
+
+      {/* Confirm Modal */}
+      {showConfirmModal && (
+        <ModalShell onClose={() => setShowConfirmModal(false)}>
+          <h3 className="text-xl font-semibold mb-2">Confirm booking</h3>
+          <p className="mb-4">
+            {nights} night{nights > 1 && "s"} x {venue.price} NOK<br />
+            <strong>Total: {totalPrice} NOK</strong>
+          </p>
+          <div className="flex justify-center gap-4">
+            <button onClick={() => setShowConfirmModal(false)} className="px-4 py-2 rounded-md border border-black hover:bg-gray-100">Cancel</button>
+            <button onClick={handleBookingConfirm} className="btn btn-primary">Reserve</button>
+          </div>
+        </ModalShell>
+      )}
+
+      {/* Success Modal */}
+      {showSuccessModal && (
+        <ModalShell onClose={() => setShowSuccessModal(false)}>
+          <h3 className="text-xl font-semibold mb-4">Booking confirmed!</h3>
+          <div className="flex flex-col gap-3">
+            <button onClick={() => (window.location.href = "/profile")} className="btn btn-primary">View my bookings</button>
+            <button onClick={() => (window.location.href = "/")} className="text-sm underline text-gray-600 hover:text-black">Go back home</button>
+          </div>
+        </ModalShell>
+      )}
     </div>
   );
 }
+
 
 
 
