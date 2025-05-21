@@ -27,6 +27,7 @@ export default function VenuePage() {
 
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const [nights, setNights] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
 
@@ -76,22 +77,30 @@ export default function VenuePage() {
   }
 
   function handleInitialReserve() {
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      setShowLoginModal(true);
+      return;
+    }
+  
     if (!startDate || !endDate || !guests || !venue?.id) {
       alert("Please fill in all fields");
       return;
     }
-
+  
     const diff = endDate - startDate;
     const calculatedNights = Math.ceil(diff / (1000 * 60 * 60 * 24));
     setNights(calculatedNights);
     setTotalPrice(calculatedNights * venue.price);
     setShowConfirmModal(true);
   }
+  
 
   async function handleBookingConfirm() {
     const token = localStorage.getItem("accessToken");
     if (!token) {
-      alert("You must be logged in to book.");
+      setShowConfirmModal(false);
+      setShowLoginModal(true);
       return;
     }
 
@@ -242,14 +251,14 @@ export default function VenuePage() {
       {/* Confirm Modal */}
       {showConfirmModal && (
         <ModalShell onClose={() => setShowConfirmModal(false)}>
-          <h3 className="text-xl font-semibold mb-2">Confirm booking</h3>
-          <p className="mb-4">
+          <h1 className="text-center font-semibold pt-10 mb-2 text-xl">Confirm booking</h1>
+          <p className="mb-4 text-center">
             {nights} night{nights > 1 && "s"} x {venue.price} NOK<br />
             <strong>Total: {totalPrice} NOK</strong>
           </p>
-          <div className="flex justify-center gap-4">
-            <button onClick={() => setShowConfirmModal(false)} className="px-4 py-2 rounded-md border border-black hover:bg-gray-100">Cancel</button>
-            <button onClick={handleBookingConfirm} className="btn btn-primary">Reserve</button>
+          <div className="flex justify-center gap-4 px-16">
+            <button onClick={() => setShowConfirmModal(false)} className="btn btn-secondary w-full">Cancel</button>
+            <button onClick={handleBookingConfirm} className="btn btn-primary w-full">Reserve</button>
           </div>
         </ModalShell>
       )}
@@ -257,16 +266,40 @@ export default function VenuePage() {
       {/* Success Modal */}
       {showSuccessModal && (
         <ModalShell onClose={() => setShowSuccessModal(false)}>
-          <h3 className="text-xl font-semibold mb-4">Booking confirmed!</h3>
-          <div className="flex flex-col gap-3">
+          <h1 className="text-center font-semibold pt-10 mb-2 text-xl">Success! Your stay is booked.</h1>
+          <p className="text-center mb-4 font-extralight">A confirmation has been sent to your email.</p>
+          <div className="flex flex-col gap-3 px-16">
             <button onClick={() => (window.location.href = "/profile")} className="btn btn-primary">View my bookings</button>
             <button onClick={() => (window.location.href = "/")} className="text-sm underline text-gray-600 hover:text-black">Go back home</button>
+          </div>
+        </ModalShell>
+      )}
+
+      {/* Login Required Modal */}
+      {showLoginModal && (
+        <ModalShell onClose={() => setShowLoginModal(false)}>
+          <h1 className="text-center font-semibold pt-10 mb-2 text-xl">Hold on! You need to log in</h1>
+          <p className="text-center mb-4 font-extralight">Sign in to continue – it only takes a moment!</p>
+          <div className="flex justify-center gap-3 px-16">
+            <button onClick={() => (window.location.href = "/login")} className="btn w-full btn-primary">
+              Log in
+            </button>
+            <button onClick={() => (window.location.href = "/register")} className="btn w-full btn-primary">
+            Create account
+            </button>
+          </div>
+          <div
+            onClick={() => setShowLoginModal(false)}
+            className="text-center font-alexandria text-sm mt-4 underline cursor-pointer hover:text-black"
+          >
+            or go back to venue
           </div>
         </ModalShell>
       )}
     </div>
   );
 }
+
 
 
 
