@@ -1,0 +1,69 @@
+
+.react-calendar {
+  font-family: 'Alexandria', sans-serif;
+  background-color: white;
+  border: none;
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  width: 100%;
+}
+
+.react-calendar__navigation {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.react-calendar__navigation button {
+  background: none;
+  border: none;
+  color: #000;
+  font-weight: 400;
+  font-size: 1rem;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.react-calendar__month-view__weekdays {
+  text-align: center;
+  font-weight: 500;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  color: #333;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.5rem;
+}
+
+.react-calendar__tile {
+  border-radius: 0.5rem;
+  font-weight: 300;
+  padding: 0.75rem 0;
+  color: #000;
+  background: none;
+  transition: background-color 0.2s;
+}
+
+.react-calendar__tile:enabled:hover {
+  background-color: #eee;
+}
+
+.react-calendar__tile--now {
+  background-color: #343434;
+  border-radius: 10px;
+  color: white;
+}
+
+.react-calendar__tile--active {
+  background-color: #343434;
+  color: white;
+}
+
+.react-calendar__tile.custom-booked {
+  color: black;
+  text-decoration: underline;
+  border-radius: 10px;
+  font-weight: 600;
+  position: relative;
+}
+

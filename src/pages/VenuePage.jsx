@@ -1,304 +1,319 @@
-import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import "../styles/datepicker.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faWifi,
-  faDog,
-  faParking,
-  faCoffee,
-} from "@fortawesome/free-solid-svg-icons";
-import ModalShell from "../components/ModalShell";
-import { BASE_URL, API_KEY } from "../utils/api";
+import { API_KEY, BASE_URL } from "../utils/api";
+import { Link } from "react-router-dom";
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
 
-export default function VenuePage() {
-  const { id } = useParams();
-  const [venue, setVenue] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
-  const [guests, setGuests] = useState(1);
-  const [bookedDates, setBookedDates] = useState([]);
-  const [currentImg, setCurrentImg] = useState(0);
-  const [touchStartX, setTouchStartX] = useState(0);
+export default function Profile() {
+  const userName = localStorage.getItem("userName");
+  const accessToken = localStorage.getItem("accessToken");
 
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [showLoginModal, setShowLoginModal] = useState(false);
-  const [nights, setNights] = useState(0);
-  const [totalPrice, setTotalPrice] = useState(0);
+  const [profile, setProfile] = useState(null);
+  const [bio, setBio] = useState("");
+  const [avatarUrl, setAvatarUrl] = useState("");
+  const [status, setStatus] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [error, setError] = useState("");
+  const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
-    async function fetchVenue() {
+    async function fetchProfile() {
+      if (!userName || !accessToken) {
+        setError("You must be logged in.");
+        return;
+      }
+
+      try {
+        const response = await fetch(`${BASE_URL}/holidaze/profiles/${userName}`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "X-Noroff-API-Key": API_KEY,
+          },
+        });
+
+        const data = await response.json();
+
+        if (response.status === 404) throw new Error("Profile not found – does this user exist?");
+        if (!response.ok) throw new Error(data.errors?.[0]?.message || "Failed to fetch profile");
+        if (!data.data) throw new Error("Missing 'data' in response");
+
+        setProfile(data.data);
+        setBio(data.data.bio || "");
+        setAvatarUrl(data.data.avatar?.url || "");
+        setError("");
+      } catch (err) {
+        console.error("Failed to fetch profile:", err);
+        setError(err.message || "Something went wrong");
+      }
+    }
+
+    fetchProfile();
+  }, [userName, accessToken]);
+
+  useEffect(() => {
+    async function fetchBookings() {
+      if (!userName || !accessToken) return;
+
       try {
         const response = await fetch(
-          `${BASE_URL}/holidaze/venues/${id}?_bookings=true&_owner=true`,
+          `${BASE_URL}/holidaze/profiles/${userName}/bookings?_venue=true`,
           {
             headers: {
+              Authorization: `Bearer ${accessToken}`,
               "X-Noroff-API-Key": API_KEY,
             },
           }
         );
-        if (!response.ok) throw new Error("Venue not found");
+
         const data = await response.json();
-        setVenue(data.data);
-        setBookedDates(getDisabledDates(data.data.bookings));
+
+        if (!response.ok) {
+          throw new Error(data.errors?.[0]?.message || "Failed to fetch bookings");
+        }
+
+        const sorted = data.data.sort(
+          (a, b) => new Date(a.dateFrom) - new Date(b.dateFrom)
+        );
+
+        setBookings(sorted);
       } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
+        console.error("Booking fetch error:", err);
       }
     }
 
-    fetchVenue();
-  }, [id]);
+    fetchBookings();
+  }, [userName, accessToken]);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentImg((prev) => (prev + 1) % (venue?.media?.length || 1));
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [venue]);
-
-  function getDisabledDates(bookings) {
-    const dates = [];
-    bookings.forEach(({ dateFrom, dateTo }) => {
-      let current = new Date(dateFrom);
-      const end = new Date(dateTo);
-      while (current < end) {
-        dates.push(new Date(current));
-        current.setDate(current.getDate() + 1);
-      }
-    });
-    return dates;
-  }
-
-  function handleInitialReserve() {
-    const token = localStorage.getItem("accessToken");
-    if (!token) {
-      setShowLoginModal(true);
-      return;
-    }
-  
-    if (!startDate || !endDate || !guests || !venue?.id) {
-      alert("Please fill in all fields");
-      return;
-    }
-  
-    const diff = endDate - startDate;
-    const calculatedNights = Math.ceil(diff / (1000 * 60 * 60 * 24));
-    setNights(calculatedNights);
-    setTotalPrice(calculatedNights * venue.price);
-    setShowConfirmModal(true);
-  }
-  
-
-  async function handleBookingConfirm() {
-    const token = localStorage.getItem("accessToken");
-    if (!token) {
-      setShowConfirmModal(false);
-      setShowLoginModal(true);
-      return;
-    }
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    setStatus("");
 
     try {
-      const response = await fetch(`${BASE_URL}/holidaze/bookings`, {
-        method: "POST",
+      const response = await fetch(`${BASE_URL}/holidaze/profiles/${userName}`, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${accessToken}`,
           "X-Noroff-API-Key": API_KEY,
         },
         body: JSON.stringify({
-          dateFrom: startDate.toISOString(),
-          dateTo: endDate.toISOString(),
-          guests,
-          venueId: venue.id,
+          bio,
+          avatar: {
+            url: avatarUrl,
+            alt: `${userName}'s avatar`,
+          },
         }),
       });
 
       const data = await response.json();
-      if (!response.ok) throw new Error(data.errors?.[0]?.message || "Booking failed");
 
-      setShowConfirmModal(false);
-      setShowSuccessModal(true);
+      if (!response.ok) {
+        throw new Error(data.errors?.[0]?.message || "Update failed");
+      }
+
+      setProfile(data.data);
+      localStorage.setItem("avatarUrl", data.data.avatar?.url || "");
+      setStatus("Profile updated!");
+      setIsModalOpen(false);
     } catch (err) {
-      console.error("Booking error:", err);
-      alert(`Booking failed: ${err.message}`);
+      console.error("Update error:", err);
+      setStatus(err.message || "Something went wrong");
     }
+  };
+
+  if (error) {
+    return <p className="text-center mt-8">{error}</p>;
   }
 
-  if (loading) return <div className="text-center mt-12">Loading...</div>;
-  if (error) return <div className="text-center mt-12">Error: {error}</div>;
-  if (!venue) return null;
+  if (!profile) {
+    return <p className="text-center mt-8">Loading profile...</p>;
+  }
+
+  const displayName = profile?.name
+    ? profile.name.charAt(0).toUpperCase() + profile.name.slice(1)
+    : "";
+
+  const groupedBookings = bookings.reduce((acc, booking) => {
+    const date = new Date(booking.dateFrom);
+    const key = date.toLocaleString("default", { month: "long", year: "numeric" });
+
+    if (!acc[key]) acc[key] = [];
+    acc[key].push(booking);
+
+    return acc;
+  }, {});
+
+  const bookedDates = bookings.flatMap((booking) => {
+    const start = new Date(booking.dateFrom);
+    const end = new Date(booking.dateTo);
+    const dates = [];
+
+    for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+      dates.push(new Date(d));
+    }
+
+    return dates;
+  });
+
+  const getBookingsForDate = (date) => {
+    return bookings.filter((booking) => {
+      const from = new Date(booking.dateFrom);
+      const to = new Date(booking.dateTo);
+      return date >= from && date <= to;
+    });
+  };
 
   return (
-    <div className="max-w-6xl mx-auto p-6 grid grid-cols-1 md:grid-cols-[3fr_2fr] gap-8 pb-56 md:pb-0">
-      {/* Image Carousel */}
-      <div>
-        {venue.media?.length > 0 && (
-          <div
-            className="relative select-none"
-            onClick={() => setCurrentImg((prev) => (prev + 1) % venue.media.length)}
-            onTouchStart={(e) => setTouchStartX(e.touches[0].clientX)}
-            onTouchEnd={(e) => {
-              const touchEndX = e.changedTouches[0].clientX;
-              const diff = touchStartX - touchEndX;
-              if (Math.abs(diff) > 50) {
-                if (diff > 0) {
-                  setCurrentImg((prev) => (prev + 1) % venue.media.length);
-                } else {
-                  setCurrentImg((prev) => (prev - 1 + venue.media.length) % venue.media.length);
-                }
-              }
-            }}
-          >
-            <img
-              src={venue.media[currentImg].url}
-              alt={venue.media[currentImg].alt || `Image ${currentImg + 1}`}
-              className="rounded-xl w-full h-96 md:h-[27rem] object-cover cursor-pointer"
-            />
-            <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-2">
-              {venue.media.map((_, i) => (
-                <button
-                  key={i}
-                  className={`w-3 h-3 rounded-full ${i === currentImg ? "bg-white" : "bg-gray-400"}`}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setCurrentImg(i);
-                  }}
-                ></button>
-              ))}
-            </div>
-          </div>
-        )}
+    <>
+      <div className="max-w-md mx-auto text-center mt-12 p-10">
+        <img
+          src={profile.avatar?.url || "https://placehold.co/150x150?text=Avatar"}
+          alt={profile.avatar?.alt || "Avatar"}
+          className="w-32 h-32 mx-auto rounded-full object-cover border"
+        />
+
+        <h1 className="text-xl pt-2">{displayName}</h1>
+
+        <p className="text-sm pt-2 pb-6">
+          {profile.bio || <span>No bio added yet.</span>}
+        </p>
+
+        <button
+          onClick={() => setIsModalOpen(true)}
+          className="btn btn-primary w-full"
+        >
+          Edit profile
+        </button>
       </div>
+      
+      <div className="max-w-6xl mx-auto mt-12 grid md:grid-cols-2 gap-8">
+        <div>
+          <h2 className="text-xl font-normal mb-4">Your upcoming bookings</h2>
 
-      {/* Info + Booking */}
-      <div className="flex flex-col gap-2 pt-6">
-        <h1 className="text-2xl font-medium">{venue.name}</h1>
-        <h2>{venue.location.city}, {venue.location.country}</h2>
-        <p className="text-lg font-medium">{venue.maxGuests} Guests</p>
-        <p className="text-lg font-medium">{venue.price} NOK / night</p>
+          {Object.keys(groupedBookings).length === 0 ? (
+            <p>No bookings yet.</p>
+          ) : (
+            Object.entries(groupedBookings).map(([monthYear, group]) => (
+              <div key={monthYear} className="mb-6">
+                <h3 className="text-lg font-alexandria font-light mb-2">{monthYear}</h3>
 
-        <div className="pt-6 font-alexandria text-xl hidden md:block">Booking</div>
-        <div className="bg-lightgray md:text-center rounded-2xl shadow-xl pl-10 py-5 md:py-10 md:px-2 md:static fixed bottom-0 left-0 right-0 z-10">
-          <div className="max-w-6xl mx-auto">
-            <div className="font-alexandria pb-4 text-xl text-left block md:hidden">Booking</div>
-            <div className="grid grid-cols-3 font-alexandria">
-              <div>
-                <label className="block text-md mb-1">Check in</label>
-                <DatePicker
-                  selected={startDate}
-                  onChange={(date) => setStartDate(date)}
-                  excludeDates={bookedDates}
-                  placeholderText="Add date"
-                  className="w-full bg-transparent md:text-center font-thin placeholder-black rounded-md"
-                  minDate={new Date()}
-                />
-              </div>
-              <div>
-                <label className="block text-md mb-1">Check out</label>
-                <DatePicker
-                  selected={endDate}
-                  onChange={(date) => setEndDate(date)}
-                  excludeDates={bookedDates}
-                  placeholderText="Add date"
-                  className="w-full bg-transparent md:text-center font-thin placeholder-black"
-                  minDate={startDate || new Date()}
-                />
-              </div>
-              <div>
-                <label className="block text-md mb-1">Guests</label>
-                <input
-                  type="number"
-                  min="1"
-                  max={venue.maxGuests}
-                  value={guests}
-                  onChange={(e) => setGuests(parseInt(e.target.value))}
-                  placeholder="Add guests"
-                  className="bg-transparent md:text-center font-thin placeholder-black rounded-md w-20"
-                />
-              </div>
-            </div>
+                <div className="space-y-4">
+                  {group.map((booking) => {
+                    const venue = booking.venue;
+                    const dateFrom = new Date(booking.dateFrom);
+                    const dateTo = new Date(booking.dateTo);
 
-            <div className="mt-4 flex justify-center">
-              <button onClick={handleInitialReserve} className="btn btn-primary w-40 mt-4">
-                Reserve
-              </button>
-            </div>
-          </div>
+                    const formatDate = (date) =>
+                      `${date.getDate()}. ${date.toLocaleString("default", {
+                        month: "short",
+                      })}`;
+
+                    return (
+                      <Link
+                        to={`/venue/${venue.id}`}
+                        key={booking.id}
+                        className="flex gap-4 items-center p-4 transition"
+                      >
+                        <img
+                          src={venue?.media?.[0]?.url || "https://placehold.co/100x100"}
+                          alt={venue?.media?.[0]?.alt || "Venue image"}
+                          className="w-24 h-24 rounded object-cover"
+                        />
+                        <div>
+                          <h2 className="font-alexandria font-medium">{venue.name}</h2>
+                          <p>
+                            {formatDate(dateFrom)} - {formatDate(dateTo)}
+                          </p>
+                          <p>Guests: {booking.guests}</p>
+                        </div>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        <div>
+          <h2 className="text-xl font-normal mb-4">Your calendar</h2>
+          <Calendar
+          tileClassName={({ date }) => {
+            const isBooked = bookedDates.some(
+              (d) =>
+                d.getFullYear() === date.getFullYear() &&
+                d.getMonth() === date.getMonth() &&
+                d.getDate() === date.getDate()
+            );
+            return isBooked ? "custom-booked" : null;
+          }}
+          
+          tileContent={({ date }) => {
+            const bookingsForDate = getBookingsForDate(date);
+            if (bookingsForDate.length === 0) return null;
+          
+            return (
+              <div className="text-[10px] leading-tight text-center mt-1 text-black">
+                {bookingsForDate[0].venue.name.split(" ")[0]}
+              </div>
+            );
+          }}
+            
+          />
         </div>
       </div>
 
-      {/* Facilities + Description */}
-      <div className="md:col-span-2">
-        <h2 className="text-2xl font-semibold mb-2">Facilities</h2>
-        <ul className="list-none mb-6 space-y-2">
-          {venue.meta.wifi && <li className="flex items-center gap-2 text-blackish"><FontAwesomeIcon icon={faWifi} /> Wifi</li>}
-          {venue.meta.pets && <li className="flex items-center gap-2 text-blackish"><FontAwesomeIcon icon={faDog} /> Pets allowed</li>}
-          {venue.meta.parking && <li className="flex items-center gap-2 text-blackish"><FontAwesomeIcon icon={faParking} /> Parking</li>}
-          {venue.meta.breakfast && <li className="flex items-center gap-2 text-blackish"><FontAwesomeIcon icon={faCoffee} /> Breakfast</li>}
-        </ul>
-        <h2 className="text-2xl font-semibold mb-2">About</h2>
-        <p className="mb-4">{venue.description}</p>
-        <p className="text-md font-normal pb-6">Hosted by {venue.owner?.name || "Unknown"}</p>
-      </div>
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-20 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-xl max-w-xl w-full space-y-4 shadow-lg">
+            <div className="flex justify-end">
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="text-sm font-alexandria"
+              >
+                Close
+              </button>
+            </div>
 
-      {/* Confirm Modal */}
-      {showConfirmModal && (
-        <ModalShell onClose={() => setShowConfirmModal(false)}>
-          <h1 className="text-center font-semibold pt-10 mb-2 text-xl">Confirm booking</h1>
-          <p className="mb-4 text-center">
-            {nights} night{nights > 1 && "s"} x {venue.price} NOK<br />
-            <strong>Total: {totalPrice} NOK</strong>
-          </p>
-          <div className="flex justify-center gap-4 px-16">
-            <button onClick={() => setShowConfirmModal(false)} className="btn btn-secondary w-full">Cancel</button>
-            <button onClick={handleBookingConfirm} className="btn btn-primary w-full">Reserve</button>
-          </div>
-        </ModalShell>
-      )}
+            {avatarUrl ? (
+              <img
+                src={avatarUrl}
+                alt="Avatar preview"
+                className="w-24 h-24 mx-auto rounded-full object-cover bg-lightgray text-lightgray"
+              />
+            ) : (
+              <div className="w-24 h-24 mx-auto rounded-full bg-lightgray" />
+            )}
 
-      {/* Success Modal */}
-      {showSuccessModal && (
-        <ModalShell onClose={() => setShowSuccessModal(false)}>
-          <h1 className="text-center font-semibold pt-10 mb-2 text-xl">Success! Your stay is booked.</h1>
-          <p className="text-center mb-4 font-extralight">A confirmation has been sent to your email.</p>
-          <div className="flex flex-col gap-3 px-16">
-            <button onClick={() => (window.location.href = "/profile")} className="btn btn-primary">View my bookings</button>
-            <button onClick={() => (window.location.href = "/")} className="text-sm underline text-gray-600 hover:text-black">Go back home</button>
-          </div>
-        </ModalShell>
-      )}
+            <form onSubmit={handleUpdate} className="space-y-4 px-20 pb-20">
+              <input
+                type="url"
+                value={avatarUrl}
+                onChange={(e) => setAvatarUrl(e.target.value)}
+                className="form-input"
+                placeholder="New image link"
+              />
 
-      {/* Login Required Modal */}
-      {showLoginModal && (
-        <ModalShell onClose={() => setShowLoginModal(false)}>
-          <h1 className="text-center font-semibold pt-10 mb-2 text-xl">Hold on! You need to log in</h1>
-          <p className="text-center mb-4 font-extralight">Sign in to continue – it only takes a moment!</p>
-          <div className="flex justify-center gap-3 px-16">
-            <button onClick={() => (window.location.href = "/login")} className="btn w-full btn-primary">
-              Log in
-            </button>
-            <button onClick={() => (window.location.href = "/register")} className="btn w-full btn-primary">
-            Create account
-            </button>
+              <textarea
+                value={bio}
+                onChange={(e) => setBio(e.target.value)}
+                className="form-input h-40"
+                rows="3"
+                placeholder="Write something about yourself..."
+              />
+
+              <button type="submit" className="btn btn-primary w-full">
+                Save changes
+              </button>
+            </form>
           </div>
-          <div
-            onClick={() => setShowLoginModal(false)}
-            className="text-center font-alexandria text-sm mt-4 underline cursor-pointer hover:text-black"
-          >
-            or go back to venue
-          </div>
-        </ModalShell>
+        </div>
       )}
-    </div>
+    </>
   );
 }
+
+
 
 
 
