@@ -8,19 +8,18 @@ export default function Header() {
 
   const isLoggedIn = !!localStorage.getItem("accessToken");
   const avatarUrl = localStorage.getItem("avatarUrl");
+  const userName = localStorage.getItem("userName");
+  const isVenueManager = localStorage.getItem("isVenueManager") === "true";
   const isOnProfilePage = location.pathname === "/profile";
+  const isOnManagerProfile = location.pathname === "/managerprofile";
 
-  const isAuthPage = [
-    "/login",
-    "/register",
-    "/managerlogin",
-    "/managerregister"
-  ].includes(location.pathname);
+  const isAuthPage = ["/login", "/register", "/managerregister"].includes(location.pathname);
 
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("userName");
     localStorage.removeItem("avatarUrl");
+    localStorage.removeItem("isVenueManager");
     navigate("/login");
   };
 
@@ -31,43 +30,44 @@ export default function Header() {
           Holidaze
         </Link>
 
-        {/* Desktop nav */}
         {!isAuthPage && (
           <nav className="hidden md:flex gap-4 items-center">
             {!isLoggedIn && (
               <>
                 <Link to="/register" className="text-base pt-2 font-medium">Register</Link>
-                <Link to="/login" className="btn btn-primary">Login</Link>
+                <Link to="/login" className="btn btn-primary w-full">Login</Link>
               </>
             )}
 
-            {isLoggedIn && !isOnProfilePage && (
-              <Link to="/profile">
+            {isLoggedIn && !isOnProfilePage && !isOnManagerProfile && (
+              <Link to={isVenueManager ? "/managerprofile" : "/profile"}>
                 {avatarUrl ? (
                   <img
                     src={avatarUrl}
                     alt="Profile avatar"
-                    className="w-12 h-12 rounded-full object-cover"
+                    className="w-14 h-14 rounded-full object-cover"
                   />
                 ) : (
-                  <div className="w-12 h-12 rounded-full bg-lightgray text-lightgray" />
+                  <div className="w-14 h-14 rounded-full bg-lightgray text-lightgray" />
                 )}
               </Link>
             )}
 
-            {isLoggedIn && isOnProfilePage && (
-              <button onClick={handleLogout} className="btn btn-secondary">
+            {isLoggedIn && (isOnProfilePage || isOnManagerProfile) && (
+              <button onClick={handleLogout} className="btn btn-secondary ">
                 Log out
               </button>
             )}
 
-            <Link to="/managerlogin" className="btn btn-secondary">
-              Venue Manager
+            <Link
+              to={isVenueManager ? "/register" : "/managerregister"}
+              className="btn btn-primary"
+            >
+              {isVenueManager ? "Traveler" : "Venue Manager"}
             </Link>
           </nav>
         )}
 
-        {/* Mobile menu button */}
         {!isAuthPage && (
           <button
             className="md:hidden btn btn-primary"
@@ -78,7 +78,6 @@ export default function Header() {
         )}
       </div>
 
-      {/* Mobile full screen menu */}
       {menuOpen && !isAuthPage && (
         <div className="fixed inset-0 bg-white z-50 flex flex-col items-center p-6">
           <button
@@ -108,40 +107,46 @@ export default function Header() {
               </>
             )}
 
-            {isLoggedIn && !isOnProfilePage && (
-              <Link
-                to="/profile"
-                onClick={() => setMenuOpen(false)}
-                className="mb-4"
-              >
-                {avatarUrl ? (
-                  <img
-                    src={avatarUrl}
-                    alt="Profile avatar"
-                    className="w-14 h-14 rounded-full object-cover"
-                  />
-                ) : (
-                  <div className="w-14 h-14 rounded-full bg-lightgray text-lightgray" />
-                )}
-              </Link>
+            {isLoggedIn && !isOnProfilePage && !isOnManagerProfile && (
+              <>
+                <Link
+                  to={isVenueManager ? "/managerprofile" : "/profile"}
+                  onClick={() => setMenuOpen(false)}
+                  className="mb-2"
+                >
+                  {avatarUrl ? (
+                    <img
+                      src={avatarUrl}
+                      alt="Profile avatar"
+                      className="w-16 h-16 rounded-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-16 h-16 rounded-full bg-lightgray text-lightgray" />
+                  )}
+                </Link>
+                <p className="text-md font-medium mb-4">{userName}</p>
+              </>
             )}
 
-            {isLoggedIn && isOnProfilePage && (
+            <Link
+              to={isVenueManager ? "/register" : "/managerregister"}
+              className="btn btn-primary w-full text-center mb-4"
+              onClick={() => setMenuOpen(false)}
+            >
+              {isVenueManager ? "Traveler" : "Venue Manager"}
+            </Link>
+
+            {isLoggedIn && (
               <button
-                onClick={handleLogout}
-                className="btn btn-secondary w-full text-center mb-4"
+                onClick={() => {
+                  handleLogout();
+                  setMenuOpen(false);
+                }}
+                className="btn btn-secondary w-full text-center"
               >
                 Log out
               </button>
             )}
-
-            <Link
-              to="/managerlogin"
-              className="btn btn-secondary w-full text-center"
-              onClick={() => setMenuOpen(false)}
-            >
-              Venue Manager
-            </Link>
           </div>
 
           <div className="absolute bottom-4 left-6 text-left">
@@ -154,5 +159,6 @@ export default function Header() {
     </header>
   );
 }
+
 
 

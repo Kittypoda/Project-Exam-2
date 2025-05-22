@@ -38,6 +38,7 @@ export default function Register() {
       }
 
       navigate("/login");
+      localStorage.removeItem("isVenueManager");
     } catch (err) {
       console.error("Register error:", err);
       setError(err.message || "Something went wrong");
@@ -53,7 +54,7 @@ export default function Register() {
           className="w-full max-w-md flex flex-col"
         >
           <h1 className="font-alexandria font-semibold p-2 text-center">
-            Sign up
+            Sign up as a traveler
           </h1>
           <h2 className="text-center p-2">
             Already a user?{" "}
@@ -97,13 +98,12 @@ export default function Register() {
           {error && <p className="text-red-600 text-sm">{error}</p>}
           <div className="font-alexandria font-light mt-10 ">Turn your special spot into someone’s stay</div>
           <button className="btn btn-secondary mt-4">
-          <Link to="/login">
+            <Link to="/managerregister">
               Become a venue manager
             </Link>
-            </button>
+          </button>
         </form>
       </div>
-      
 
       {/* Right side: image (hidden on mobile) */}
       <div className="hidden px-6 pb-40 lg:block">
@@ -116,3 +116,4 @@ export default function Register() {
     </div>
   );
 }
+

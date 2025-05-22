@@ -37,6 +37,7 @@ export default function ManagerRegister() {
         throw new Error(data.errors?.[0]?.message || "Registration failed");
       }
 
+      localStorage.setItem("isVenueManager", "true");
       navigate("/login");
     } catch (err) {
       console.error("Register error:", err);
@@ -97,13 +98,13 @@ export default function ManagerRegister() {
           {error && <p className="text-red-600 text-sm mt-2">{error}</p>}
 
           <div className="font-alexandria font-light mt-10">
-          A bed for every adventure 
+            A bed for every adventure 
           </div>
           <button className="btn btn-secondary mt-4">
-          <Link to="/login">
-              Go to traveler login
+            <Link to="/register">
+              Go to traveler register
             </Link>
-            </button>
+          </button>
         </form>
       </div>
 

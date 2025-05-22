@@ -52,6 +52,7 @@ export default function Login() {
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("userName", name);
       localStorage.setItem("avatarUrl", avatar?.url || "");
+      localStorage.setItem("isVenueManager", isManager ? "true" : "false");
 
       // Redirect to correct profile page
       navigate(isManager ? "/managerprofile" : "/profile");
@@ -125,6 +126,7 @@ export default function Login() {
     </div>
   );
 }
+
 
 
 
