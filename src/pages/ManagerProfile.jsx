@@ -11,7 +11,7 @@ export default function ManagerProfile() {
   };
 
   return (
-    <div className="md:grid md:grid-cols-3 min-h-screen">
+    <div className="md:grid md:grid-cols-3 min-h-screen px-20 pt-6">
       {/* Sidebar */}
       <aside className="bg-white p-6 md:col-span-1 border-r">
         <div className="text-center">

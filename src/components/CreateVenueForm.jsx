@@ -72,9 +72,10 @@ export default function CreateVenueForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 max-w-xl">
-      <h2 className="text-xl font-semibold">Create new venue</h2>
+    <form onSubmit={handleSubmit} className="space-y-6 max-w-xl">
+      <h1 className="text-xl font-normal pb-4">Create new venue</h1>
 
+      <div className="text-sm font-alexandria font-light text-blackish">Give your venue a unique and catchy name that stands out.
       <input
         className="form-input w-full"
         placeholder="Title"
@@ -82,56 +83,65 @@ export default function CreateVenueForm() {
         onChange={(e) => setName(e.target.value)}
         required
       />
+      </div>
 
+      <div className="text-sm font-alexandria font-light text-blackish">Where is your place located?
       <input
         className="form-input w-full"
         placeholder="Location"
         value={location.city}
         onChange={(e) => setLocation({ ...location, city: e.target.value })}
       />
+      </div>
 
+      <div className="text-sm font-alexandria font-light text-blackish">Tell guests what makes your place special.
       <textarea
-        className="form-input w-full h-28"
+        className="form-input w-full h-40"
         placeholder="Description"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
         required
       />
+      </div>
 
+      <div className="text-sm font-alexandria font-light">Facilities
       <div className="flex flex-wrap gap-2">
         {Object.entries(meta).map(([key, value]) => (
           <button
             type="button"
             key={key}
             onClick={() => handleMetaChange(key)}
-            className={`px-4 py-2 rounded border shadow ${value ? "bg-primary text-white" : "bg-white"}`}
+            className={`px-4 py-2 font-alexandria font-light text-sm rounded shadow hover:bg-mintgreen ${value ? "bg-mintgreen" : "bg-white"}`}
           >
             {key.charAt(0).toUpperCase() + key.slice(1)}
           </button>
         ))}
       </div>
+      </div>
 
+      <div className="text-sm font-alexandria font-light">Details
       <div className="grid grid-cols-2 gap-4">
         <input
           className="form-input"
           placeholder="Guests"
-          type="number"
+          type="text"
           value={maxGuests}
           onChange={(e) => setMaxGuests(e.target.value)}
           required
         />
         <input
           className="form-input"
-          placeholder="Price (NOK/day)"
-          type="number"
+          placeholder="Price  NOK/day"
+          type="text"
           value={price}
           onChange={(e) => setPrice(e.target.value)}
           required
         />
       </div>
+      </div>
 
       <div>
-        <p className="font-medium">Add image links</p>
+      <div className="text-sm font-alexandria font-light">Add image links
         {media.map((m, i) => (
           <div key={i} className="flex gap-2 mb-2">
             <input
@@ -148,6 +158,7 @@ export default function CreateVenueForm() {
             />
           </div>
         ))}
+        </div>
         <button type="button" className="text-sm underline" onClick={handleAddMedia}>
           + Add more
         </button>
