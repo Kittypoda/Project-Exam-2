@@ -74,9 +74,9 @@ export default function ManagerProfile() {
   };
 
   return (
-    <div className="md:grid md:grid-cols-3 min-h-screen pt-6">
+    <div className="md:grid md:grid-cols-3 max-w-6xl mx-auto min-h-screen pt-4 px-4">
       {/* Sidebar */}
-      <aside className="bg-lightgray px-10 p-6 md:col-span-1">
+      <aside className="bg-lightgray px-5 p-6 md:col-span-1">
         <div className="text-center pt-6">
           <img
             src={avatarUrl || "https://placehold.co/150x150?text=Avatar"}
