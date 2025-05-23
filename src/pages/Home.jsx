@@ -123,8 +123,6 @@ export default function Home() {
 
   const displayedVenues = searchResults.length > 0 ? searchResults : venues;
 
-  if (loading) return <Loader />;
-
   return (
     <>
       {/* Hero / Banner */}
@@ -177,74 +175,76 @@ export default function Home() {
       </section>
 
       {/* Venue grid */}
-      <section id="venue-section" className="max-w-7xl mx-auto mt-12 bg-lightgray p-4">
-        {error && (
-          <div className="text-center text-red-500 font-alexandria text-lg">
-            {error}
-          </div>
-        )}
-        {!error && (
-          <>
-            <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
-              {displayedVenues.map((venue) => (
-                <VenueCard key={venue.id} venue={venue} />
-              ))}
+      <div className="bg-lightgray w-full">
+        <section id="venue-section" className="max-w-7xl mx-auto mt-8 px-4 py-7">
+          {loading && <Loader />}
+          {error && (
+            <div className="text-center text-red-500 font-alexandria text-lg">
+              {error}
             </div>
-
-            {/* Pagination */}
-            {searchResults.length === 0 && (
-              <div className="flex justify-center items-center gap-2 mt-12 font-alexandria text-blackish">
-                {(() => {
-                  const windowSize = 5;
-                  const startPage = Math.floor((page - 1) / windowSize) * windowSize + 1;
-                  const endPage = Math.min(startPage + windowSize - 1, pageCount);
-
-                  return (
-                    <>
-                      {startPage > 1 && (
-                        <button
-                          onClick={() => setPage(startPage - windowSize)}
-                          className="px-3 py-1 rounded-md hover:bg-lightgray"
-                        >
-                          &lt;
-                        </button>
-                      )}
-
-                      {[...Array(endPage - startPage + 1)].map((_, index) => {
-                        const pageNumber = startPage + index;
-                        return (
-                          <button
-                            key={pageNumber}
-                            onClick={() => setPage(pageNumber)}
-                            className={`px-3 py-1 rounded-md ${
-                              page === pageNumber
-                                ? "bg-blackish text-white"
-                                : "hover:bg-lightgray"
-                            }`}
-                          >
-                            {pageNumber}
-                          </button>
-                        );
-                      })}
-
-                      {endPage < pageCount && (
-                        <button
-                          onClick={() => setPage(endPage + 1)}
-                          className="px-3 py-1 rounded-md hover:bg-lightgray"
-                        >
-                          &gt;
-                        </button>
-                      )}
-                    </>
-                  );
-                })()}
+          )}
+          {!loading && !error && (
+            <>
+              <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
+                {displayedVenues.map((venue) => (
+                  <VenueCard key={venue.id} venue={venue} />
+                ))}
               </div>
-            )}
-          </>
-        )}
-      </section>
+
+              {/* Pagination */}
+              {searchResults.length === 0 && (
+                <div className="flex justify-center items-center gap-2 mt-12 font-alexandria text-blackish">
+                  {(() => {
+                    const windowSize = 5;
+                    const startPage = Math.floor((page - 1) / windowSize) * windowSize + 1;
+                    const endPage = Math.min(startPage + windowSize - 1, pageCount);
+
+                    return (
+                      <>
+                        {startPage > 1 && (
+                          <button
+                            onClick={() => setPage(startPage - windowSize)}
+                            className="px-3 py-1 rounded-md hover:bg-lightgray"
+                          >
+                            &lt;
+                          </button>
+                        )}
+
+                        {[...Array(endPage - startPage + 1)].map((_, index) => {
+                          const pageNumber = startPage + index;
+                          return (
+                            <button
+                              key={pageNumber}
+                              onClick={() => setPage(pageNumber)}
+                              className={`px-3 py-1 rounded-md ${
+                                page === pageNumber
+                                  ? "bg-blackish text-white"
+                                  : "hover:bg-lightgray"
+                              }`}
+                            >
+                              {pageNumber}
+                            </button>
+                          );
+                        })}
+
+                        {endPage < pageCount && (
+                          <button
+                            onClick={() => setPage(endPage + 1)}
+                            className="px-3 py-1 rounded-md hover:bg-lightgray"
+                          >
+                            &gt;
+                          </button>
+                        )}
+                      </>
+                    );
+                  })()}
+                </div>
+              )}
+            </>
+          )}
+        </section>
+      </div>
     </>
   );
 }
-
 

@@ -1,10 +1,12 @@
 import { useState } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 export default function SearchBar({ onSearch, onClear, isSearching }) {
   const [location, setLocation] = useState("");
   const [guests, setGuests] = useState("");
-  const [checkIn, setCheckIn] = useState("");
-  const [checkOut, setCheckOut] = useState("");
+  const [checkIn, setCheckIn] = useState(null);
+  const [checkOut, setCheckOut] = useState(null);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -14,8 +16,8 @@ export default function SearchBar({ onSearch, onClear, isSearching }) {
   function handleClear() {
     setLocation("");
     setGuests("");
-    setCheckIn("");
-    setCheckOut("");
+    setCheckIn(null);
+    setCheckOut(null);
     onClear();
   }
 
@@ -25,7 +27,6 @@ export default function SearchBar({ onSearch, onClear, isSearching }) {
         onSubmit={handleSubmit}
         className="flex flex-wrap items-end gap-4"
       >
-        {/* Location - full width on small screens */}
         <div className="w-full sm:flex-1 min-w-[160px] max-w-[300px]">
           <label className="block text-sm font-alexandria mb-1">Location</label>
           <input
@@ -33,42 +34,43 @@ export default function SearchBar({ onSearch, onClear, isSearching }) {
             value={location}
             onChange={(e) => setLocation(e.target.value)}
             placeholder="Where are you going?"
-            className="w-full font-alexandria placeholder-black text-sm font-extralight"
+            className="w-full font-alexandria placeholder-gray-600 text-sm font-extralight focus:outline-none focus:ring-0"
           />
         </div>
 
-        {/* Check in */}
-        <div className="flex-1 min-w-[130px] max-w-[200px]">
-          <label className="block text-sm font-alexandria mb-1">Check in</label>
-          <input
-            type="date"
-            value={checkIn}
-            onChange={(e) => setCheckIn(e.target.value)}
-            className="w-full font-alexandria text-sm font-extralight"
-          />
-        </div>
+      <div className="flex-1 min-w-[130px] max-w-[200px]">
+      <label className="block text-sm font-alexandria mb-1">Check in</label>
+      <DatePicker
+        selected={checkIn}
+        onChange={(date) => setCheckIn(date)}
+        placeholderText="Check in"
+        className="w-full font-alexandria text-sm placeholder-gray-600 font-extralight focus:outline-none focus:ring-0"
+        dateFormat="yyyy-MM-dd"
+        minDate={new Date()}
+      />
+    </div>
 
-        {/* Check out */}
-        <div className="flex-1 min-w-[130px] max-w-[200px]">
-          <label className="block text-sm font-alexandria mb-1">Check out</label>
-          <input
-            type="date"
-            value={checkOut}
-            onChange={(e) => setCheckOut(e.target.value)}
-            className="w-full font-alexandria text-sm font-extralight"
-          />
-        </div>
+      <div className="flex-1 min-w-[130px] max-w-[200px]">
+      <label className="block text-sm font-alexandria mb-1">Check out</label>
+      <DatePicker
+        selected={checkOut}
+        onChange={(date) => setCheckOut(date)}
+        placeholderText="Check out"
+        className="w-full font-alexandria text-sm placeholder-gray-600 font-extralight focus:outline-none focus:ring-0"
+        dateFormat="yyyy-MM-dd"
+        minDate={checkIn || new Date()}
+      />
+    </div>
 
-        {/* Guests */}
         <div className="flex-1 min-w-[130px] max-w-[200px]">
           <label className="block text-sm font-alexandria mb-1">Guests</label>
           <input
-            type="number"
+            type="text"
             min="1"
             value={guests}
             onChange={(e) => setGuests(e.target.value)}
             placeholder="Add guests"
-            className="w-full font-alexandria text-sm font-extralight"
+            className="w-full font-alexandria text-sm font-extralight focus:outline-none focus:ring-0"
           />
         </div>
 
@@ -78,14 +80,14 @@ export default function SearchBar({ onSearch, onClear, isSearching }) {
             <button
               type="button"
               onClick={handleClear}
-              className="text-blackish border border-blackish p-3 rounded-md hover:bg-lightgray transition"
+              className="btn btn-secondary"
             >
               Clear
             </button>
           )}
           <button
             type="submit"
-            className="w-24 bg-blackish text-white p-3 rounded-md shadow-md fa fa-search hover:bg-black transition"
+            className="w-24 bg-blackish text-white p-3 rounded-md shadow-md fa fa-search transition hover:text-black hover:bg-mintgreen"
           >
           </button>
         </div>
