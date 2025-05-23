@@ -57,7 +57,7 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen grid grid-cols-1 lg:grid-cols-[2fr_3fr]">
+    <div className="min-h-screen px:20 grid grid-cols-1 lg:grid-cols-[2fr_3fr]">
       {/* Left side: form */}
       <div className="flex justify-center px-8 py-40">
         <div className="w-full max-w-md flex flex-col items-center">
