@@ -9,7 +9,7 @@ import Register from './pages/Register';
 import Venue from './pages/VenuePage';
 import Profile from './pages/Profile';
 import ManagerRegister from './pages/ManagerRegister';
-import ManagerProfile from './pages/ManagerProfiletemp';
+import ManagerProfile from './pages/ManagerProfile';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
