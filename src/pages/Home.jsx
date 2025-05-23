@@ -126,7 +126,7 @@ export default function Home() {
   return (
     <>
       {/* Hero / Banner */}
-      <section className="relative h-[60vh] md:h-[80vh] overflow-hidden px-6">
+      <section className="relative h-[60vh] md:h-[80vh] overflow-hidden px-2 md:px-6">
         <div className="relative h-full max-w-7xl mx-auto px-6 overflow-hidden rounded-40px rounded-tr-none">
           <div className="absolute inset-0 w-[120%] -translate-x-1/2 animate-float-x">
             <img
@@ -176,7 +176,7 @@ export default function Home() {
 
       {/* Venue grid */}
       <div className="bg-lightgray w-full">
-        <section id="venue-section" className="max-w-7xl mx-auto mt-8 px-4 py-7">
+        <section id="venue-section" className="max-w-7xl mx-auto md:mt-8 md:px-4 py-7">
           {loading && <Loader />}
           {error && (
             <div className="text-center text-red-500 font-alexandria text-lg">
