@@ -34,8 +34,8 @@ export default function Header() {
           <nav className="hidden md:flex gap-4 items-center">
             {!isLoggedIn && (
               <>
-                <Link to="/register" className="text-base pt-2 font-medium">Register</Link>
-                <Link to="/login" className="btn btn-primary w-full">Login</Link>
+                <Link to="/register" className="text-base font-alexandria pt-2 font-medium">Register</Link>
+                <Link to="/login" className="btn btn-primary">Login</Link>
               </>
             )}
 
@@ -61,7 +61,7 @@ export default function Header() {
 
             <Link
               to={isVenueManager ? "/register" : "/managerregister"}
-              className="btn btn-primary"
+              className="btn btn-secondary"
             >
               {isVenueManager ? "Traveler" : "Venue Manager"}
             </Link>
@@ -130,7 +130,7 @@ export default function Header() {
 
             <Link
               to={isVenueManager ? "/register" : "/managerregister"}
-              className="btn btn-primary w-full text-center mb-4"
+              className="btn btn-secondary w-full text-center mb-4"
               onClick={() => setMenuOpen(false)}
             >
               {isVenueManager ? "Traveler" : "Venue Manager"}
