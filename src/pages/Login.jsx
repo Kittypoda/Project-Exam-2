@@ -49,7 +49,7 @@ export default function Login() {
       localStorage.setItem("avatarUrl", avatar?.url || "");
       localStorage.setItem("isVenueManager", isManager ? "true" : "false");
 
-      navigate(isManager ? "/managerprofile" : "/profile");
+      navigate("/");
     } catch (err) {
       console.error("Login error:", err);
       setError(err.message || "Something went wrong");
