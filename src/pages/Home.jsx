@@ -136,40 +136,43 @@ export default function Home() {
           </div>
           <div className="absolute inset-0 bg-overlaygreen/40"></div>
           <div className="relative z-10 flex flex-col justify-center h-full px-[10%] md:px-[15%]">
-            <div className="text-xl text-white md:text-h1 font-alexandria font-semibold text-center md:text-left">
+            <div className="text-3xl text-white md:text-5xl font-alexandria font-semibold text-center md:text-left">
               A bed for every adventure
             </div>
-            <div className="mt-2">
-              <div className="text-3xl text-white font-alexandria font-extralight">
-                Explore
-              </div>
-              <a
-                href="#venue-section"
-                className="mt-2 block text-white hover:scale-125 transition-transform duration-300"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-6 h-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                </svg>
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
+            <div className="mt-2 flex items-center justify-center md:justify-start gap-2 group">
+  <div className=" text-xl md:text-3xl text-white font-alexandria font-extralight">
+    Explore
+  </div>
+  <a
+    href="#search-section"
+    className="text-white group-hover:animate-bounce transform transition-transform duration-300"
+    aria-label="Scroll to venues"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="w-6 h-6"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth={2}
+    >
+      <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+    </svg>
+  </a>
+</div>
+ </div>
+ </div>
+ </section>
 
       {/* Search Bar */}
+      <section id="search-section">
       <SearchBar
         onSearch={handleSearch}
         onClear={handleClearSearch}
         isSearching={isSearching}
       />
-
+      </section>
+  
       {/* Venue grid */}
       <section id="venue-section" className="max-w-7xl mx-auto mt-12 bg-lightgray p-4">
         {loading && (
