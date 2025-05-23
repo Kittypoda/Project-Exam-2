@@ -21,6 +21,7 @@
         blackish: '#343434',
         lightgray: '#FAFAFA',
         overlaygreen: '#123F45',
+        deletered: '#B93127',
       },
       animation: {
         'float-x': 'floatX 15s ease-in-out infinite',

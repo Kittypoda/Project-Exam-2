@@ -11,9 +11,9 @@ export default function ManagerProfile() {
   };
 
   return (
-    <div className="md:grid md:grid-cols-3 min-h-screen px-20 pt-6">
+    <div className="md:grid md:grid-cols-3 min-h-screen pt-6">
       {/* Sidebar */}
-      <aside className="bg-white p-6 md:col-span-1 border-r">
+      <aside className="bg-lightgray px-10 p-6 md:col-span-1">
         <div className="text-center">
           <img
             src={localStorage.getItem("avatarUrl") || "https://placehold.co/150x150?text=Avatar"}
@@ -37,13 +37,13 @@ export default function ManagerProfile() {
         <nav className="space-y-4">
           <button
             onClick={() => handleSectionChange("myVenues")}
-            className="block w-full text-left font-medium hover:underline"
+            className="block font-alexandria w-full text-left hover:underline"
           >
             My venues
           </button>
           <button
             onClick={() => handleSectionChange("bookings")}
-            className="block w-full text-left font-medium hover:underline"
+            className="block w-full text-left font-alexandria hover:underline"
           >
             Upcoming bookings
           </button>
