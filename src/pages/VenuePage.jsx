@@ -12,6 +12,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import ModalShell from "../components/ModalShell";
 import { BASE_URL, API_KEY } from "../utils/api";
+import fallbackImage from "../assets/fallback.png";
+
 
 export default function VenuePage() {
   const { id } = useParams();
@@ -136,46 +138,53 @@ export default function VenuePage() {
   if (!venue) return null;
 
   return (
-    <div className="max-w-6xl mx-auto p-6 grid grid-cols-1 md:grid-cols-[3fr_2fr] gap-8 pb-56 md:pb-0">
+    <div className="max-w-6xl mx-auto p-6 grid grid-cols-1 md:grid-cols-[3fr_2fr] gap-8 pb-56">
       {/* Image Carousel */}
-      <div>
-        {venue.media?.length > 0 && (
-          <div
-            className="relative select-none"
-            onClick={() => setCurrentImg((prev) => (prev + 1) % venue.media.length)}
-            onTouchStart={(e) => setTouchStartX(e.touches[0].clientX)}
-            onTouchEnd={(e) => {
-              const touchEndX = e.changedTouches[0].clientX;
-              const diff = touchStartX - touchEndX;
-              if (Math.abs(diff) > 50) {
-                if (diff > 0) {
-                  setCurrentImg((prev) => (prev + 1) % venue.media.length);
-                } else {
-                  setCurrentImg((prev) => (prev - 1 + venue.media.length) % venue.media.length);
-                }
-              }
+<div>
+  {venue.media && venue.media.length > 0 ? (
+    <div
+      className="relative select-none"
+      onClick={() => setCurrentImg((prev) => (prev + 1) % venue.media.length)}
+      onTouchStart={(e) => setTouchStartX(e.touches[0].clientX)}
+      onTouchEnd={(e) => {
+        const touchEndX = e.changedTouches[0].clientX;
+        const diff = touchStartX - touchEndX;
+        if (Math.abs(diff) > 50) {
+          if (diff > 0) {
+            setCurrentImg((prev) => (prev + 1) % venue.media.length);
+          } else {
+            setCurrentImg((prev) => (prev - 1 + venue.media.length) % venue.media.length);
+          }
+        }
+      }}
+    >
+      <img
+        src={venue.media[currentImg]?.url || fallbackImage}
+        alt={venue.media[currentImg]?.alt || `Image ${currentImg + 1}`}
+        className="rounded-xl w-full h-96 md:h-[27rem] object-cover cursor-pointer"
+      />
+      <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-2">
+        {venue.media.map((_, i) => (
+          <button
+            key={i}
+            className={`w-3 h-3 rounded-full ${i === currentImg ? "bg-white" : "bg-gray-400"}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              setCurrentImg(i);
             }}
-          >
-            <img
-              src={venue.media[currentImg].url}
-              alt={venue.media[currentImg].alt || `Image ${currentImg + 1}`}
-              className="rounded-xl w-full h-96 md:h-[27rem] object-cover cursor-pointer"
-            />
-            <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-2">
-              {venue.media.map((_, i) => (
-                <button
-                  key={i}
-                  className={`w-3 h-3 rounded-full ${i === currentImg ? "bg-white" : "bg-gray-400"}`}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setCurrentImg(i);
-                  }}
-                ></button>
-              ))}
-            </div>
-          </div>
-        )}
+          ></button>
+        ))}
       </div>
+    </div>
+  ) : (
+    <img
+      src={fallbackImage}
+      alt="Fallback image"
+      className="rounded-xl w-full h-96 md:h-[27rem] object-cover"
+    />
+  )}
+</div>
+
 
       {/* Info + Booking */}
       <div className="flex flex-col gap-2 pt-6">
