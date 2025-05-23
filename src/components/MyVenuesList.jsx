@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import ModalShell from "./ModalShell";
 import EditVenueModal from "./EditVenueModal"; 
+import fallbackImage from "../assets/fallback.png";
 
 export default function MyVenuesList() {
   const userName = localStorage.getItem("userName");
@@ -90,8 +91,8 @@ export default function MyVenuesList() {
       {venues.map((venue) => (
         <div key={venue.id} className="flex items-center gap-4 p-4">
           <Link to={`/venue/${venue.id}`} className="flex items-center gap-4 flex-1">
-            <img
-              src={venue.media?.[0]?.url || "https://placehold.co/100x100"}
+          <img
+              src={venue.media?.[0]?.url || fallbackImage}
               alt={venue.media?.[0]?.alt || "Venue image"}
               className="w-32 h-32 rounded-xl object-cover"
             />
