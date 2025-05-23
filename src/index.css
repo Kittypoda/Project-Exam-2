@@ -28,5 +28,5 @@ p {
 }
 
 .form-input {
-  @apply w-full shadow-md p-4 rounded-md font-alexandria font-light text-sm placeholder-black border border-white focus:outline-none focus:ring-0 focus:border-dustygreen;;
+  @apply w-full shadow-md p-4 rounded-md font-alexandria font-light text-sm placeholder-gray-600 border border-white focus:outline-none focus:ring-0 focus:border-dustygreen;;
 }
