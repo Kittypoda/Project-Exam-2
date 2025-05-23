@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import banner from "../assets/banner.png";
 import VenueCard from "../components/VenueCard";
 import SearchBar from "../components/SearchBar";
+import Loader from "../components/Loader";
 
 export default function Home() {
   const [venues, setVenues] = useState([]);
@@ -122,6 +123,8 @@ export default function Home() {
 
   const displayedVenues = searchResults.length > 0 ? searchResults : venues;
 
+  if (loading) return <Loader />;
+
   return (
     <>
       {/* Hero / Banner */}
@@ -140,52 +143,47 @@ export default function Home() {
               A bed for every adventure
             </div>
             <div className="mt-2 flex items-center justify-center md:justify-start gap-2 group">
-  <div className=" text-xl md:text-3xl text-white font-alexandria font-extralight">
-    Explore
-  </div>
-  <a
-    href="#search-section"
-    className="text-white group-hover:animate-bounce transform transition-transform duration-300"
-    aria-label="Scroll to venues"
-  >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className="w-6 h-6"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-      strokeWidth={2}
-    >
-      <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-    </svg>
-  </a>
-</div>
- </div>
- </div>
- </section>
+              <div className=" text-xl md:text-3xl text-white font-alexandria font-extralight">
+                Explore
+              </div>
+              <a
+                href="#search-section"
+                className="text-white group-hover:animate-bounce transform transition-transform duration-300"
+                aria-label="Scroll to venues"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-6 h-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Search Bar */}
       <section id="search-section">
-      <SearchBar
-        onSearch={handleSearch}
-        onClear={handleClearSearch}
-        isSearching={isSearching}
-      />
+        <SearchBar
+          onSearch={handleSearch}
+          onClear={handleClearSearch}
+          isSearching={isSearching}
+        />
       </section>
-  
+
       {/* Venue grid */}
       <section id="venue-section" className="max-w-7xl mx-auto mt-12 bg-lightgray p-4">
-        {loading && (
-          <div className="text-center font-alexandria text-blackish text-lg">
-            Loading venues...
-          </div>
-        )}
         {error && (
           <div className="text-center text-red-500 font-alexandria text-lg">
             {error}
           </div>
         )}
-        {!loading && !error && (
+        {!error && (
           <>
             <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
               {displayedVenues.map((venue) => (
@@ -248,7 +246,5 @@ export default function Home() {
     </>
   );
 }
-
-
 
 

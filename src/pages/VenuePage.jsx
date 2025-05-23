@@ -13,6 +13,7 @@ import {
 import ModalShell from "../components/ModalShell";
 import { BASE_URL, API_KEY } from "../utils/api";
 import fallbackImage from "../assets/fallback.png";
+import Loader from "../components/Loader";
 
 
 export default function VenuePage() {
@@ -133,7 +134,7 @@ export default function VenuePage() {
     }
   }
 
-  if (loading) return <div className="text-center mt-12">Loading...</div>;
+  if (loading) return <Loader />;
   if (error) return <div className="text-center mt-12">Error: {error}</div>;
   if (!venue) return null;
 
