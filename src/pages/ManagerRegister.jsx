@@ -9,7 +9,7 @@ export default function ManagerRegister() {
     name: "",
     email: "",
     password: "",
-    venueManager: true, 
+    venueManager: true,
   });
 
   const [error, setError] = useState("");
@@ -49,63 +49,66 @@ export default function ManagerRegister() {
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-[2fr_3fr]">
       {/* Left side: form */}
       <div className="flex justify-center px-8 py-40">
-        <form
-          onSubmit={handleSubmit}
-          className="w-full max-w-md flex flex-col"
-        >
-          <h1 className="font-alexandria font-semibold p-2 text-center">
-            Become a venue manager
-          </h1>
-          <h2 className="text-center p-2">
-            Already registered?{" "}
-            <Link to="/login" className="underline text-underline">
-              Log in here
-            </Link>
-          </h2>
+        <div className="w-full max-w-md flex flex-col items-center">
+          <form
+            onSubmit={handleSubmit}
+            className="w-full flex flex-col"
+          >
+            <h1 className="font-alexandria font-semibold p-2 text-center">
+              Become a venue manager
+            </h1>
+            <h2 className="text-center p-2">
+              Already registered?{" "}
+              <Link to="/login" className="underline text-underline">
+                Log in here
+              </Link>
+            </h2>
 
-          <input
-            type="text"
-            name="name"
-            placeholder="Username"
-            value={formData.name}
-            onChange={handleChange}
-            required
-            className="form-input my-4"
-          />
-          <input
-            type="email"
-            name="email"
-            placeholder="example@stud.noroff.no"
-            value={formData.email}
-            onChange={handleChange}
-            required
-            className="form-input my-4"
-          />
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-            className="form-input my-4"
-          />
+            <input
+              type="text"
+              name="name"
+              placeholder="Username"
+              value={formData.name}
+              onChange={handleChange}
+              required
+              className="form-input my-4"
+            />
+            <input
+              type="email"
+              name="email"
+              placeholder="example@stud.noroff.no"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              className="form-input my-4"
+            />
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              className="form-input my-4"
+            />
 
-          <button type="submit" className="btn btn-primary w-full">
-            Register as manager
-          </button>
+            <button type="submit" className="btn btn-primary w-full">
+              Register as manager
+            </button>
 
-          {error && <p className="text-red-600 text-sm mt-2">{error}</p>}
+            {error && <p className="text-red-600 text-sm mt-2">{error}</p>}
+          </form>
 
-          <div className="font-alexandria font-light mt-10">
-            A bed for every adventure 
-          </div>
-          <button className="btn btn-secondary mt-4">
-            <Link to="/register">
+          {/* Call to action */}
+          <div className=" mt-10 w-full">
+            <div className="font-alexandria font-light">
+              A bed for every adventure
+            </div>
+            <Link to="/register" className="btn btn-secondary text-center mt-4 w-full inline-block">
               Go to traveler register
             </Link>
-          </button>
-        </form>
+          </div>
+        </div>
       </div>
 
       {/* Right side: image (hidden on mobile) */}
@@ -119,3 +122,4 @@ export default function ManagerRegister() {
     </div>
   );
 }
+

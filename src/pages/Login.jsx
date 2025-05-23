@@ -28,12 +28,8 @@ export default function Login() {
       }
 
       const { accessToken, name, avatar } = data.data;
+      if (!accessToken || !name) throw new Error("Unexpected API response");
 
-      if (!accessToken || !name) {
-        throw new Error("Unexpected API response");
-      }
-
-      // Fetch profile to determine role
       const profileResponse = await fetch(`${BASE_URL}/holidaze/profiles/${name}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -48,13 +44,11 @@ export default function Login() {
 
       const isManager = profileData.data.venueManager;
 
-      // Store login info
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("userName", name);
       localStorage.setItem("avatarUrl", avatar?.url || "");
       localStorage.setItem("isVenueManager", isManager ? "true" : "false");
 
-      // Redirect to correct profile page
       navigate(isManager ? "/managerprofile" : "/profile");
     } catch (err) {
       console.error("Login error:", err);
@@ -66,56 +60,60 @@ export default function Login() {
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-[2fr_3fr]">
       {/* Left side: form */}
       <div className="flex justify-center px-8 py-40">
-        <form
-          onSubmit={handleSubmit}
-          className="w-full max-w-md flex flex-col"
-        >
-          <h1 className="font-alexandria font-semibold p-2 text-center">
-            Log in
-          </h1>
-          <h2 className="text-center p-2">
-            New here?{" "}
-            <Link to="/register" className="underline text-underline">
-              Register an account
+        <div className="w-full max-w-md flex flex-col items-center">
+          <form
+            onSubmit={handleSubmit}
+            className="w-full flex flex-col"
+          >
+            <h1 className="font-alexandria font-semibold p-2 text-center">
+              Log in
+            </h1>
+            <h2 className="text-center p-2">
+              New here?{" "}
+              <Link to="/register" className="underline text-underline">
+                Register an account
+              </Link>
+            </h2>
+
+            <input
+              type="email"
+              name="email"
+              placeholder="example@stud.noroff.no"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="form-input my-4"
+            />
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="form-input my-4"
+            />
+
+            <button type="submit" className="btn btn-primary w-full">
+              Login
+            </button>
+
+            {error && <p className="text-red-600 text-sm mt-2">{error}</p>}
+          </form>
+
+          {/* Call to action */}
+          <div className="mt-10 w-full">
+            <div className="font-alexandria font-light">
+              Turn your special spot into someone’s stay.
+            </div>
+            <Link to="/managerregister" className=" text-center btn btn-secondary mt-4 w-full inline-block">
+              Become a venue manager
             </Link>
-          </h2>
-
-          <input
-            type="email"
-            name="email"
-            placeholder="example@stud.noroff.no"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="form-input my-4"
-          />
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="form-input my-4"
-          />
-
-          <button type="submit" className="btn btn-primary w-full">
-            Login
-          </button>
-
-          {error && <p className="text-red-600 text-sm mt-2">{error}</p>}
-
-          <div className="font-alexandria font-light mt-10">
-            Turn your special spot into someone’s stay.
           </div>
-
-          <button className="btn btn-secondary mt-4">
-            <Link to="/managerregister">Become a venue manager</Link>
-          </button>
-        </form>
+        </div>
       </div>
 
-      {/* Right side: image (hidden on mobile) */}
+      {/* Right side: image */}
       <div className="hidden px-6 pb-40 lg:block">
         <img
           src={loginImg}
@@ -126,6 +124,7 @@ export default function Login() {
     </div>
   );
 }
+
 
 
 

@@ -47,73 +47,80 @@ export default function Register() {
 
   return (
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-[2fr_3fr]">
-      {/* Left side: form */}
-      <div className="flex justify-center px-8 py-40">
-        <form
-          onSubmit={handleSubmit}
-          className="w-full max-w-md flex flex-col"
-        >
-          <h1 className="font-alexandria font-semibold p-2 text-center">
-            Sign up as a traveler
-          </h1>
-          <h2 className="text-center p-2">
-            Already a user?{" "}
-            <Link to="/login" className="underline text-underline">
-              Log in here
-            </Link>
-          </h2>
+  {/* Left side: form and call-to-action */}
+  <div className="flex justify-center px-8 py-40">
+    <div className="w-full max-w-md flex flex-col items-center">
+      <form
+        onSubmit={handleSubmit}
+        className="w-full flex flex-col"
+      >
+        <h1 className="font-alexandria font-semibold p-2 text-center">
+          Sign up as a traveler
+        </h1>
+        <h2 className="text-center p-2">
+          Already a user?{" "}
+          <Link to="/login" className="underline text-underline">
+            Log in here
+          </Link>
+        </h2>
 
-          <input
-            type="text"
-            name="name"
-            placeholder="Username"
-            value={formData.name}
-            onChange={handleChange}
-            required
-            className="form-input my-4"
-          />
-          <input
-            type="email"
-            name="email"
-            placeholder="example@stud.noroff.no"
-            value={formData.email}
-            onChange={handleChange}
-            required
-            className="form-input my-4"
-          />
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-            className="form-input my-4"
-          />
-
-          <button type="submit" className="btn btn-primary w-full">
-            Register
-          </button>
-
-          {error && <p className="text-red-600 text-sm">{error}</p>}
-          <div className="font-alexandria font-light mt-10 ">Turn your special spot into someone’s stay</div>
-          <button className="btn btn-secondary mt-4">
-            <Link to="/managerregister">
-              Become a venue manager
-            </Link>
-          </button>
-        </form>
-      </div>
-
-      {/* Right side: image (hidden on mobile) */}
-      <div className="hidden px-6 pb-40 lg:block">
-        <img
-          src={registerImg}
-          alt="Registration"
-          className="w-full max-h-[900px] min-h-[800px] object-cover rounded-2xl rounded-tr-none "
+        <input
+          type="text"
+          name="name"
+          placeholder="Username"
+          value={formData.name}
+          onChange={handleChange}
+          required
+          className="form-input my-4"
         />
+        <input
+          type="email"
+          name="email"
+          placeholder="example@stud.noroff.no"
+          value={formData.email}
+          onChange={handleChange}
+          required
+          className="form-input my-4"
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          value={formData.password}
+          onChange={handleChange}
+          required
+          className="form-input my-4"
+        />
+
+        <button type="submit" className="btn btn-primary w-full">
+          Register
+        </button>
+
+        {error && <p className="text-red-600 text-sm mt-2">{error}</p>}
+      </form>
+
+      {/* Call to action — visually same position, outside form */}
+      <div className="mt-10 w-full">
+        <div className="font-alexandria font-light">
+          Turn your special spot into someone’s stay
+        </div>
+        <Link to="/managerregister" className="text-center btn btn-secondary mt-4 w-full inline-block">
+          Become a venue manager
+        </Link>
       </div>
     </div>
+  </div>
+
+  {/* Right side image */}
+  <div className="hidden px-6 pb-40 lg:block">
+    <img
+      src={registerImg}
+      alt="Registration"
+      className="w-full max-h-[900px] min-h-[800px] object-cover rounded-2xl rounded-tr-none"
+    />
+  </div>
+</div>
+
   );
 }
 
