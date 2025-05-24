@@ -267,7 +267,7 @@ export default function VenuePage() {
 
       {showConfirmModal && (
         <ModalShell onClose={() => setShowConfirmModal(false)}>
-          <h1 className="text-center font-semibold pt-10 mb-2 text-xl">Confirm booking</h1>
+          <h1 className="text-center font-semibold pt-10 mb-2 text-2xl">Confirm booking</h1>
           <p className="mb-4 text-center">
             {nights} night{nights > 1 && 's'} x {venue.price} NOK
             <br />
@@ -286,7 +286,7 @@ export default function VenuePage() {
 
       {showSuccessModal && (
         <ModalShell onClose={() => setShowSuccessModal(false)}>
-          <h1 className="text-center font-semibold pt-10 mb-2 text-xl">
+          <h1 className="text-center font-semibold pt-10 mb-2 text-2xl">
             Success! Your stay is booked.
           </h1>
           <p className="text-center mb-4 font-extralight">
@@ -308,7 +308,7 @@ export default function VenuePage() {
 
       {showLoginModal && (
         <ModalShell onClose={() => setShowLoginModal(false)}>
-          <h1 className="text-center font-semibold pt-10 mb-2 text-xl">
+          <h1 className="text-center font-semibold pt-10 mb-2 text-2xl">
             Hold on! You need to log in
           </h1>
           <p className="text-center mb-4 font-extralight">

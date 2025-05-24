@@ -184,7 +184,7 @@ export default function Profile() {
           className="w-32 h-32 mx-auto rounded-full object-cover border"
         />
 
-        <h1 className="text-xl pt-2">{displayName}</h1>
+        <h1 className="text-2xl pt-2">{displayName}</h1>
 
         <p className="text-sm pt-2 pb-6">{profile.bio || <span>No bio added yet.</span>}</p>
 

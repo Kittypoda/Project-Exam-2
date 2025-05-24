@@ -78,7 +78,7 @@ export default function EditVenueModal({ venue, onClose, onUpdate }) {
         </button>
 
         <form onSubmit={handleSubmit} className="space-y-6 max-w-xl pb-20">
-          <h1 className="text-xl font-normal pb-4">Edit venue</h1>
+          <h1 className="text-2xl font-normal pb-4">Edit venue</h1>
 
           <div className="text-sm font-alexandria font-light text-blackish">
             Give your venue a unique and catchy name that stands out.

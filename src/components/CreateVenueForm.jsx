@@ -87,7 +87,7 @@ export default function CreateVenueForm() {
   return (
     <>
       <form onSubmit={handleSubmit} className="space-y-6 max-w-xl pb-20">
-        <h1 className="text-xl font-normal pb-4">Create new venue</h1>
+        <h1 className="text-2xl font-normal pb-4">Create new venue</h1>
 
         <div className="text-sm font-alexandria font-light text-blackish">
           Give your venue a unique and catchy name that stands out.
@@ -198,7 +198,7 @@ export default function CreateVenueForm() {
       {showModal && (
         <ModalShell onClose={() => setShowModal(false)}>
           <div className="text-center space-y-4 p-6">
-            <h1 className="text-xl font-medium pt-4">Venue Created!</h1>
+            <h1 className="text-2xl font-medium pt-4">Venue Created!</h1>
             <p className="text-sm font-extralight">
               Your venue is now visible to guests. You can edit it anytime.
             </p>

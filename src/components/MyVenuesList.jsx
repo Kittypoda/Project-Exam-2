@@ -82,7 +82,7 @@ export default function MyVenuesList() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-xl font-normal pt-6">My Venues</h1>
+      <h1 className="text-2xl font-normal pt-6">My Venues</h1>
 
       {venues.map((venue) => (
         <div
@@ -120,7 +120,7 @@ export default function MyVenuesList() {
       {showDeleteModal && (
         <ModalShell onClose={() => setShowDeleteModal(false)}>
           <div className="text-center space-y-4 p-6 px-9">
-            <h1 className="text-xl font-medium pt-6">Delete venue</h1>
+            <h1 className="text-2xl font-medium pt-6">Delete venue</h1>
             <p className="text-sm font-extralight">Are you sure you want to delete this venue?</p>
             <div className="flex justify-center gap-4 mt-4">
               <button onClick={confirmDelete} className="btn bg-deletered w-full">

@@ -204,7 +204,7 @@ export default function ManagerProfile() {
         {activeSection === 'bookings' && <UpcomingBookings />}
         {activeSection === 'travelerBookings' && (
           <>
-            <h1 className="text-xl font-normal pb-10 pt-6">My stays</h1>
+            <h1 className="text-2xl font-normal pb-10 pt-6">My stays</h1>
             {Object.keys(groupedTravelerBookings).length === 0 ? (
               <p>No bookings yet.</p>
             ) : (
