@@ -21,10 +21,14 @@ export default function Profile() {
   const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
+    if (!accessToken) {
+      navigate('/login');
+      return;
+    }
     if (isVenueManager) {
       navigate('/managerprofile');
     }
-  }, [isVenueManager, navigate]);
+  }, [accessToken, isVenueManager, navigate]);
 
   useEffect(() => {
     async function fetchProfile() {

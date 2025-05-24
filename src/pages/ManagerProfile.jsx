@@ -24,6 +24,10 @@ export default function ManagerProfile() {
   const [travelerBookings, setTravelerBookings] = useState([]);
 
   useEffect(() => {
+    if (!accessToken) {
+      navigate('/login');
+      return;
+    }
     if (!isVenueManager) {
       setIsAuthorized(false);
     }
