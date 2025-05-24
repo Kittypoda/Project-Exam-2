@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import ModalShell from "./ModalShell";
-import EditVenueModal from "./EditVenueModal"; 
+import EditVenueModal from "./EditVenueModal";
 import fallbackImage from "../assets/fallback.png";
 
 export default function MyVenuesList() {
@@ -86,12 +86,18 @@ export default function MyVenuesList() {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-xl font-semibold">My Venues</h2>
+      <h1 className="text-xl font-normal pt-6">My Venues</h1>
 
       {venues.map((venue) => (
-        <div key={venue.id} className="flex items-center gap-4 p-4">
-          <Link to={`/venue/${venue.id}`} className="flex items-center gap-4 flex-1">
-          <img
+        <div
+          key={venue.id}
+          className="flex flex-col md:flex-row md:items-center gap-4 p-4 border-b border-gray-200"
+        >
+          <Link
+            to={`/venue/${venue.id}`}
+            className="flex items-center gap-4 flex-1"
+          >
+            <img
               src={venue.media?.[0]?.url || fallbackImage}
               alt={venue.media?.[0]?.alt || "Venue image"}
               className="w-32 h-32 rounded-xl object-cover"
@@ -103,7 +109,7 @@ export default function MyVenuesList() {
             </div>
           </Link>
 
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-row md:flex-col gap-2 mt-4 md:mt-0 md:ml-10">
             <button
               onClick={() => handleEditClick(venue)}
               className="btn btn-primary"
@@ -151,6 +157,7 @@ export default function MyVenuesList() {
     </div>
   );
 }
+
 
 
 

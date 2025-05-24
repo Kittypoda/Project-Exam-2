@@ -61,7 +61,7 @@ export default function UpcomingBookings() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-xl font-normal">Upcoming bookings</h1>
+      <h1 className="text-xl font-normal pt-6">Upcoming bookings</h1>
 
       {Object.entries(groupedBookings).map(([monthYear, bookings]) => (
         <div key={monthYear}>

@@ -184,13 +184,13 @@ export default function ManagerProfile() {
       </aside>
 
       {/* Right Panel */}
-      <main className="md:col-span-2 p-6">
+      <main className="md:col-span-2 md:p-6">
         {activeSection === "createVenue" && <CreateVenueForm />}
         {activeSection === "myVenues" && <MyVenuesList />}
         {activeSection === "bookings" && <UpcomingBookings />}
         {activeSection === "travelerBookings" && (
           <>
-            <h1 className="text-xl font-normal pb-10">My upcoming bookings</h1>
+            <h1 className="text-xl font-normal pb-10 pt-6">My upcoming bookings</h1>
             {Object.keys(groupedTravelerBookings).length === 0 ? (
               <p>No bookings yet.</p>
             ) : (
