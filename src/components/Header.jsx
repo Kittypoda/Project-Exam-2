@@ -54,7 +54,7 @@ export default function Header() {
             )}
 
             {isLoggedIn && (isOnProfilePage || isOnManagerProfile) && (
-              <button onClick={handleLogout} className="btn btn-secondary ">
+              <button onClick={handleLogout} className="btn btn-secondary">
                 Log out
               </button>
             )}
@@ -78,7 +78,8 @@ export default function Header() {
         )}
       </div>
 
-      {menuOpen && !isAuthPage && (
+      {/* Menu modal */}
+      {!isAuthPage && menuOpen && (
         <div className="fixed inset-0 bg-white z-50 flex flex-col items-center p-6">
           <button
             className="self-end text-sm font-alexandria mb-8"
@@ -159,6 +160,8 @@ export default function Header() {
     </header>
   );
 }
+
+
 
 
 
