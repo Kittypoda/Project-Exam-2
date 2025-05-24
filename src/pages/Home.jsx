@@ -128,11 +128,11 @@ export default function Home() {
             <img src={banner} alt="Beautiful destination" className="w-full h-full object-cover" />
           </div>
           <div className="absolute inset-0 bg-overlaygreen/40"></div>
-          <div className="relative z-10 flex flex-col justify-center h-full px-[10%] md:px-[15%]">
-            <div className="text-3xl text-white md:text-5xl font-alexandria font-semibold md:text-left">
+          <div className="relative z-10 flex flex-col justify-center h-full md:px-[15%]">
+            <div className="text-2xl text-white md:text-5xl font-alexandria font-semibold text-left">
               A bed for every adventure
             </div>
-            <div className="mt-2 flex items-center  md:justify-start gap-2 group">
+            <div className=" flex items-center  md:justify-start md:gap-2 group">
               <div className=" text-2xl pr-4 md:text-3xl text-white font-alexandria font-light">
                 Explore
               </div>
