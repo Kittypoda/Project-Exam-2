@@ -71,6 +71,7 @@ export default function CreateVenueForm() {
         throw new Error(data.errors?.[0]?.message || 'Something went wrong');
       }
 
+      // Tilbakestill skjema
       setName('');
       setDescription('');
       setMedia([{ url: '', alt: '' }]);
@@ -129,7 +130,9 @@ export default function CreateVenueForm() {
                 type="button"
                 key={key}
                 onClick={() => handleMetaChange(key)}
-                className={`px-4 py-2 font-alexandria font-light text-black text-sm rounded shadow hover:bg-mintgreen ${value ? 'bg-mintgreen' : 'bg-white'}`}
+                className={`px-4 py-2 font-alexandria font-light text-black text-sm rounded shadow hover:bg-mintgreen ${
+                  value ? 'bg-mintgreen' : 'bg-white'
+                }`}
               >
                 {key.charAt(0).toUpperCase() + key.slice(1)}
               </button>
@@ -194,24 +197,24 @@ export default function CreateVenueForm() {
       </form>
 
       {showModal && (
-        <ModalShell>
+        <ModalShell onClose={() => setShowModal(false)}>
           <div className="text-center space-y-4 p-6">
             <h1 className="text-xl font-medium pt-4">Venue Created!</h1>
             <p className="text-sm font-extralight">
               Your venue is now visible to guests. You can edit it anytime.
             </p>
-            <button
-              className="btn btn-primary w-full"
-              onClick={() => {
-                if (location.pathname === '/managerprofile') {
-                  setShowModal(false);
-                } else {
-                  navigate('/managerprofile');
-                }
-              }}
-            >
-              Back to profile page
-            </button>
+
+            <div className="flex flex-col gap-3">
+              <button
+                className="btn btn-primary"
+                onClick={() => {
+                  navigate('/managerprofile', { state: { scrollTo: 'venues' } });
+                }}
+              >
+                See my venues
+              </button>
+            </div>
+
             <p onClick={() => navigate('/')} className="text-sm underline cursor-pointer">
               Or go to homepage
             </p>

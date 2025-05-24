@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useEffect, useState, useRef } from 'react';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import CreateVenueForm from '../components/CreateVenueForm';
 import MyVenuesList from '../components/MyVenuesList';
 import UpcomingBookings from '../components/UpcomingBookings';
@@ -8,6 +8,8 @@ import fallbackImage from '../assets/fallback.png';
 
 export default function ManagerProfile() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const venueListRef = useRef(null);
   const [isAuthorized, setIsAuthorized] = useState(true);
 
   const userName = localStorage.getItem('userName');
@@ -87,6 +89,15 @@ export default function ManagerProfile() {
     fetchTravelerBookings();
   }, [userName, accessToken]);
 
+  useEffect(() => {
+    if (location.state?.scrollTo === 'venues') {
+      setActiveSection('myVenues');
+      setTimeout(() => {
+        venueListRef.current?.scrollIntoView({ behavior: 'smooth' });
+      }, 200);
+    }
+  }, [location]);
+
   const handleSectionChange = (section) => setActiveSection(section);
 
   const handleUpdate = async (e) => {
@@ -131,7 +142,6 @@ export default function ManagerProfile() {
 
   return (
     <div className="md:grid md:grid-cols-3 max-w-6xl mx-auto min-h-screen pt-4 px-4">
-      {/* Sidebar */}
       <aside className="bg-lightgray px-5 p-6 md:col-span-1">
         <div className="text-center pt-6">
           <img
@@ -180,10 +190,13 @@ export default function ManagerProfile() {
         </nav>
       </aside>
 
-      {/* Right Panel */}
       <main className="md:col-span-2 md:p-6">
         {activeSection === 'createVenue' && <CreateVenueForm />}
-        {activeSection === 'myVenues' && <MyVenuesList />}
+        {activeSection === 'myVenues' && (
+          <section ref={venueListRef}>
+            <MyVenuesList />
+          </section>
+        )}
         {activeSection === 'bookings' && <UpcomingBookings />}
         {activeSection === 'travelerBookings' && (
           <>
@@ -231,7 +244,6 @@ export default function ManagerProfile() {
         )}
       </main>
 
-      {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-20 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-xl max-w-xl w-full space-y-4 shadow-lg">
