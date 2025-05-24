@@ -160,12 +160,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Search Bar */}
       <section id="search-section">
         <SearchBar onSearch={handleSearch} onClear={handleClearSearch} isSearching={isSearching} />
       </section>
 
-      {/* Venue grid */}
       <div className="bg-lightgray w-full">
         <section id="venue-section" className="max-w-7xl mx-auto md:mt-8 md:px-4 py-7">
           {loading && <Loader />}
@@ -178,7 +176,6 @@ export default function Home() {
                 ))}
               </div>
 
-              {/* Pagination */}
               {searchResults.length === 0 && (
                 <div className="flex justify-center items-center gap-2 mt-12 font-alexandria text-blackish">
                   {(() => {

@@ -16,10 +16,8 @@ export default function VenueCard({ venue }) {
           className="w-full h-64 object-cover rounded-xl mb-4"
         />
 
-        {/* Venue name */}
         <div className="font-alexandria text-black text-lg truncate">{venue.name}</div>
 
-        {/* Location always visible */}
         <div className="font-alexandria text-black text-sm truncate">{location}</div>
 
         <p className="text-sm font-extralight mt-auto">{venue.price} kr / night</p>

@@ -47,7 +47,6 @@ export default function Register() {
 
   return (
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-[1fr_1fr]">
-      {/* Left side: form and call-to-action */}
       <div className="flex justify-center px-8 py-40">
         <div className="w-full max-w-md flex flex-col items-center">
           <form onSubmit={handleSubmit} className="w-full flex flex-col">
@@ -94,7 +93,6 @@ export default function Register() {
             {error && <p className="text-red-600 text-sm mt-2">{error}</p>}
           </form>
 
-          {/* Call to action — visually same position, outside form */}
           <div className="mt-10 w-full">
             <div className="font-alexandria font-light">
               Turn your special spot into someone’s stay
@@ -109,7 +107,6 @@ export default function Register() {
         </div>
       </div>
 
-      {/* Right side image */}
       <div className="hidden px-6 pb-40 lg:block">
         <img
           src={registerImg}

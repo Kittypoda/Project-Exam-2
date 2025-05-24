@@ -71,7 +71,6 @@ export default function CreateVenueForm() {
         throw new Error(data.errors?.[0]?.message || 'Something went wrong');
       }
 
-      // Tilbakestill skjema
       setName('');
       setDescription('');
       setMedia([{ url: '', alt: '' }]);

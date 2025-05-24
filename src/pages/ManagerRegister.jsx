@@ -47,7 +47,6 @@ export default function ManagerRegister() {
 
   return (
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-[1fr_1fr]">
-      {/* Left side: form */}
       <div className="flex justify-center px-8 py-40">
         <div className="w-full max-w-md flex flex-col items-center">
           <form onSubmit={handleSubmit} className="w-full flex flex-col">
@@ -96,7 +95,6 @@ export default function ManagerRegister() {
             {error && <p className="text-red-600 text-sm mt-2">{error}</p>}
           </form>
 
-          {/* Call to action */}
           <div className=" mt-10 w-full">
             <div className="font-alexandria font-light">A bed for every adventure</div>
             <Link to="/register" className="btn btn-secondary text-center mt-4 w-full inline-block">
@@ -106,7 +104,6 @@ export default function ManagerRegister() {
         </div>
       </div>
 
-      {/* Right side: image (hidden on mobile) */}
       <div className="hidden px-6 pb-40 lg:block">
         <img
           src={registerImg}

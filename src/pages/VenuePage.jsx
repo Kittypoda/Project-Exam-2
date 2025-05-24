@@ -133,7 +133,6 @@ export default function VenuePage() {
 
   return (
     <div className="max-w-6xl mx-auto p-6 grid grid-cols-1 md:grid-cols-[3fr_2fr] gap-8 pb-56">
-      {/* Image Carousel */}
       <div>
         {venue.media && venue.media.length > 0 ? (
           <div
@@ -179,7 +178,6 @@ export default function VenuePage() {
         )}
       </div>
 
-      {/* Info + Booking */}
       <div className="flex flex-col gap-2 pt-6">
         <h1 className="text-2xl font-medium">{venue.name}</h1>
         <h2>
@@ -238,7 +236,6 @@ export default function VenuePage() {
         </div>
       </div>
 
-      {/* Facilities + Description */}
       <div className="md:col-span-2">
         <h2 className="text-2xl font-semibold mb-2">Facilities</h2>
         <ul className="list-none mb-6 space-y-2">
@@ -268,7 +265,6 @@ export default function VenuePage() {
         <p className="text-md font-normal pb-6">Hosted by {venue.owner?.name || 'Unknown'}</p>
       </div>
 
-      {/* Confirm Modal */}
       {showConfirmModal && (
         <ModalShell onClose={() => setShowConfirmModal(false)}>
           <h1 className="text-center font-semibold pt-10 mb-2 text-xl">Confirm booking</h1>
@@ -288,7 +284,6 @@ export default function VenuePage() {
         </ModalShell>
       )}
 
-      {/* Success Modal */}
       {showSuccessModal && (
         <ModalShell onClose={() => setShowSuccessModal(false)}>
           <h1 className="text-center font-semibold pt-10 mb-2 text-xl">
@@ -311,7 +306,6 @@ export default function VenuePage() {
         </ModalShell>
       )}
 
-      {/* Login Required Modal */}
       {showLoginModal && (
         <ModalShell onClose={() => setShowLoginModal(false)}>
           <h1 className="text-center font-semibold pt-10 mb-2 text-xl">

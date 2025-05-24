@@ -79,7 +79,6 @@ export default function Header() {
         )}
       </div>
 
-      {/* Menu modal */}
       {!isAuthPage && menuOpen && (
         <div className="fixed inset-0 bg-white z-50 flex flex-col items-center p-6">
           <button
