@@ -91,7 +91,7 @@ export default function MyVenuesList() {
       {venues.map((venue) => (
         <div
           key={venue.id}
-          className="flex flex-col md:flex-row md:items-center gap-4 p-4 border-b border-gray-200"
+          className="flex flex-col md:flex-row md:items-center gap-4 pb-4 border-b border-gray-200"
         >
           <Link
             to={`/venue/${venue.id}`}
