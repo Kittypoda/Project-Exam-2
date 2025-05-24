@@ -1,77 +1,62 @@
-Holidaze – Project Exam 2
+# Holidaze – Project Exam 2
 
-Welcome to Holidaze, a venue booking web application built as the final project in the Front-End Development program at Noroff.
+Welcome to **Holidaze**, a venue booking web application built as the final project in the Front-End Development program at Noroff.
 
-About
+## About
 
-Holidaze is a platform where users can browse, search, and book venues for their travels, while venue managers can list and manage accommodations. It mimics the functionality of Airbnb with a responsive design and user-friendly experience.
+Holidaze is a platform where users can browse, search, and book venues for their travels, while venue managers can list and manage accommodations. It offers similar functionality to modern venue booking platforms, with a responsive design and user-friendly experience.
 
-Tech Stack
+## Tech Stack
 
-React (with Vite)
+- React (with Vite)
+- Tailwind CSS
+- React Router
+- React Datepicker
+- ESLint & Prettier
+- Holidaze API (provided by Noroff)
 
-Tailwind CSS
+## Features
 
-React Router
+### Guests
 
-React Datepicker
+- View all available venues
+- Search by location, number of guests, and date range
+- Book venues with availability check
+- View upcoming bookings in a calendar
 
-ESLint & Prettier
+### Venue Managers
 
-Holidaze API (provided by Noroff)
+- Register/login as a manager
+- Create, update, and delete venues
+- View bookings for owned venues
 
-Features
+## 🚀 Getting Started
 
-Guests
+### Installation
 
-View all available venues
+1. Clone the repository:
 
-Search venues by location, number of guests, and date range
-
-Book venues with real-time availability
-
-View and manage upcoming bookings in a calendar
-
-Venue Managers
-
-Register and log in as a manager
-
-Create, update, and delete venues
-
-View upcoming bookings for their venues
-
-Getting Started
-
-Installation
-
-Clone the repository:
-
+```bash
 git clone https://github.com/Kittypoda/Project-Exam-2.git
-
-Navigate into the project folder:
-
 cd Project-Exam-2
-
-Install dependencies:
-
 npm install
-
-Start the local development server:
-
 npm run dev
+```
 
-Environment Variables
+### 🌐 Deployment
 
-Create a .env file in the root folder and add your Noroff API key:
+https://holiholidaze.netlify.app/
 
-VITE_API_KEY=your_api_key_here
+### 🧑‍💻 Author
 
-Deployment
+Oda Rolstad Verbeke
+Front-End Development Student at Noroff
 
-This project can be deployed to Vercel, Netlify, or any other static hosting service that supports Vite.
 
-Author
 
-Oda Rolstad Verbeke Student at Noroff School of Technology and Digital Media
+
+
+
+
 
 
