@@ -1,18 +1,18 @@
-import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import registerImg from "../assets/poolwoman.png";
+import { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import registerImg from '../assets/poolwoman.png';
 
-const API_URL = "https://v2.api.noroff.dev";
+const API_URL = 'https://v2.api.noroff.dev';
 
 export default function ManagerRegister() {
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
+    name: '',
+    email: '',
+    password: '',
     venueManager: true,
   });
 
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -21,27 +21,27 @@ export default function ManagerRegister() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
+    setError('');
 
     try {
       const response = await fetch(`${API_URL}/auth/register`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
       });
 
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.errors?.[0]?.message || "Registration failed");
+        throw new Error(data.errors?.[0]?.message || 'Registration failed');
       }
 
-      localStorage.setItem("isVenueManager", "true");
-      navigate("/login");
+      localStorage.setItem('isVenueManager', 'true');
+      navigate('/login');
     } catch (err) {
-      console.error("Register error:", err);
-      setError(err.message || "Something went wrong");
+      console.error('Register error:', err);
+      setError(err.message || 'Something went wrong');
     }
   };
 
@@ -50,15 +50,12 @@ export default function ManagerRegister() {
       {/* Left side: form */}
       <div className="flex justify-center px-8 py-40">
         <div className="w-full max-w-md flex flex-col items-center">
-          <form
-            onSubmit={handleSubmit}
-            className="w-full flex flex-col"
-          >
+          <form onSubmit={handleSubmit} className="w-full flex flex-col">
             <h1 className="font-alexandria font-semibold p-2 text-center">
               Become a venue manager
             </h1>
             <h2 className="text-center p-2">
-              Already registered?{" "}
+              Already registered?{' '}
               <Link to="/login" className="underline text-underline">
                 Log in here
               </Link>
@@ -101,9 +98,7 @@ export default function ManagerRegister() {
 
           {/* Call to action */}
           <div className=" mt-10 w-full">
-            <div className="font-alexandria font-light">
-              A bed for every adventure
-            </div>
+            <div className="font-alexandria font-light">A bed for every adventure</div>
             <Link to="/register" className="btn btn-secondary text-center mt-4 w-full inline-block">
               Go to traveler register
             </Link>
@@ -122,4 +117,3 @@ export default function ManagerRegister() {
     </div>
   );
 }
-

@@ -6,21 +6,21 @@ export default function Header() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const isLoggedIn = !!localStorage.getItem("accessToken");
-  const avatarUrl = localStorage.getItem("avatarUrl");
-  const userName = localStorage.getItem("userName");
-  const isVenueManager = localStorage.getItem("isVenueManager") === "true";
-  const isOnProfilePage = location.pathname === "/profile";
-  const isOnManagerProfile = location.pathname === "/managerprofile";
+  const isLoggedIn = !!localStorage.getItem('accessToken');
+  const avatarUrl = localStorage.getItem('avatarUrl');
+  const userName = localStorage.getItem('userName');
+  const isVenueManager = localStorage.getItem('isVenueManager') === 'true';
+  const isOnProfilePage = location.pathname === '/profile';
+  const isOnManagerProfile = location.pathname === '/managerprofile';
 
-  const isAuthPage = ["/login", "/register", "/managerregister"].includes(location.pathname);
+  const isAuthPage = ['/login', '/register', '/managerregister'].includes(location.pathname);
 
   const handleLogout = () => {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("userName");
-    localStorage.removeItem("avatarUrl");
-    localStorage.removeItem("isVenueManager");
-    navigate("/login");
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('userName');
+    localStorage.removeItem('avatarUrl');
+    localStorage.removeItem('isVenueManager');
+    navigate('/login');
   };
 
   return (
@@ -34,13 +34,17 @@ export default function Header() {
           <nav className="hidden md:flex gap-4 items-center">
             {!isLoggedIn && (
               <>
-                <Link to="/register" className="text-base font-alexandria pt-2 font-medium">Register</Link>
-                <Link to="/login" className="btn btn-primary">Login</Link>
+                <Link to="/register" className="text-base font-alexandria pt-2 font-medium">
+                  Register
+                </Link>
+                <Link to="/login" className="btn btn-primary">
+                  Login
+                </Link>
               </>
             )}
 
             {isLoggedIn && !isOnProfilePage && !isOnManagerProfile && (
-              <Link to={isVenueManager ? "/managerprofile" : "/profile"}>
+              <Link to={isVenueManager ? '/managerprofile' : '/profile'}>
                 {avatarUrl ? (
                   <img
                     src={avatarUrl}
@@ -60,19 +64,16 @@ export default function Header() {
             )}
 
             <Link
-              to={isVenueManager ? "/register" : "/managerregister"}
+              to={isVenueManager ? '/register' : '/managerregister'}
               className="btn btn-secondary"
             >
-              {isVenueManager ? "Traveler" : "Venue Manager"}
+              {isVenueManager ? 'Traveler' : 'Venue Manager'}
             </Link>
           </nav>
         )}
 
         {!isAuthPage && (
-          <button
-            className="md:hidden btn btn-primary"
-            onClick={() => setMenuOpen(true)}
-          >
+          <button className="md:hidden btn btn-primary" onClick={() => setMenuOpen(true)}>
             Menu
           </button>
         )}
@@ -111,7 +112,7 @@ export default function Header() {
             {isLoggedIn && !isOnProfilePage && !isOnManagerProfile && (
               <>
                 <Link
-                  to={isVenueManager ? "/managerprofile" : "/profile"}
+                  to={isVenueManager ? '/managerprofile' : '/profile'}
                   onClick={() => setMenuOpen(false)}
                   className="mb-2"
                 >
@@ -130,11 +131,11 @@ export default function Header() {
             )}
 
             <Link
-              to={isVenueManager ? "/register" : "/managerregister"}
+              to={isVenueManager ? '/register' : '/managerregister'}
               className="btn btn-secondary w-full text-center mb-4"
               onClick={() => setMenuOpen(false)}
             >
-              {isVenueManager ? "Traveler" : "Venue Manager"}
+              {isVenueManager ? 'Traveler' : 'Venue Manager'}
             </Link>
 
             {isLoggedIn && (
@@ -160,8 +161,3 @@ export default function Header() {
     </header>
   );
 }
-
-
-
-
-

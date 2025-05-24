@@ -1,20 +1,14 @@
-import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import "../styles/datepicker.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faWifi,
-  faDog,
-  faParking,
-  faCoffee,
-} from "@fortawesome/free-solid-svg-icons";
-import ModalShell from "../components/ModalShell";
-import { BASE_URL, API_KEY } from "../utils/api";
-import fallbackImage from "../assets/fallback.png";
-import Loader from "../components/Loader";
-
+import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import '../styles/datepicker.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faWifi, faDog, faParking, faCoffee } from '@fortawesome/free-solid-svg-icons';
+import ModalShell from '../components/ModalShell';
+import { BASE_URL, API_KEY } from '../utils/api';
+import fallbackImage from '../assets/fallback.png';
+import Loader from '../components/Loader';
 
 export default function VenuePage() {
   const { id } = useParams();
@@ -41,11 +35,11 @@ export default function VenuePage() {
           `${BASE_URL}/holidaze/venues/${id}?_bookings=true&_owner=true`,
           {
             headers: {
-              "X-Noroff-API-Key": API_KEY,
+              'X-Noroff-API-Key': API_KEY,
             },
           }
         );
-        if (!response.ok) throw new Error("Venue not found");
+        if (!response.ok) throw new Error('Venue not found');
         const data = await response.json();
         setVenue(data.data);
         setBookedDates(getDisabledDates(data.data.bookings));
@@ -80,27 +74,26 @@ export default function VenuePage() {
   }
 
   function handleInitialReserve() {
-    const token = localStorage.getItem("accessToken");
+    const token = localStorage.getItem('accessToken');
     if (!token) {
       setShowLoginModal(true);
       return;
     }
-  
+
     if (!startDate || !endDate || !guests || !venue?.id) {
-      alert("Please fill in all fields");
+      alert('Please fill in all fields');
       return;
     }
-  
+
     const diff = endDate - startDate;
     const calculatedNights = Math.ceil(diff / (1000 * 60 * 60 * 24));
     setNights(calculatedNights);
     setTotalPrice(calculatedNights * venue.price);
     setShowConfirmModal(true);
   }
-  
 
   async function handleBookingConfirm() {
-    const token = localStorage.getItem("accessToken");
+    const token = localStorage.getItem('accessToken');
     if (!token) {
       setShowConfirmModal(false);
       setShowLoginModal(true);
@@ -109,11 +102,11 @@ export default function VenuePage() {
 
     try {
       const response = await fetch(`${BASE_URL}/holidaze/bookings`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
-          "X-Noroff-API-Key": API_KEY,
+          'X-Noroff-API-Key': API_KEY,
         },
         body: JSON.stringify({
           dateFrom: startDate.toISOString(),
@@ -124,12 +117,12 @@ export default function VenuePage() {
       });
 
       const data = await response.json();
-      if (!response.ok) throw new Error(data.errors?.[0]?.message || "Booking failed");
+      if (!response.ok) throw new Error(data.errors?.[0]?.message || 'Booking failed');
 
       setShowConfirmModal(false);
       setShowSuccessModal(true);
     } catch (err) {
-      console.error("Booking error:", err);
+      console.error('Booking error:', err);
       alert(`Booking failed: ${err.message}`);
     }
   }
@@ -141,56 +134,57 @@ export default function VenuePage() {
   return (
     <div className="max-w-6xl mx-auto p-6 grid grid-cols-1 md:grid-cols-[3fr_2fr] gap-8 pb-56">
       {/* Image Carousel */}
-<div>
-  {venue.media && venue.media.length > 0 ? (
-    <div
-      className="relative select-none"
-      onClick={() => setCurrentImg((prev) => (prev + 1) % venue.media.length)}
-      onTouchStart={(e) => setTouchStartX(e.touches[0].clientX)}
-      onTouchEnd={(e) => {
-        const touchEndX = e.changedTouches[0].clientX;
-        const diff = touchStartX - touchEndX;
-        if (Math.abs(diff) > 50) {
-          if (diff > 0) {
-            setCurrentImg((prev) => (prev + 1) % venue.media.length);
-          } else {
-            setCurrentImg((prev) => (prev - 1 + venue.media.length) % venue.media.length);
-          }
-        }
-      }}
-    >
-      <img
-        src={venue.media[currentImg]?.url || fallbackImage}
-        alt={venue.media[currentImg]?.alt || `Image ${currentImg + 1}`}
-        className="rounded-xl w-full h-96 md:h-[27rem] object-cover cursor-pointer"
-      />
-      <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-2">
-        {venue.media.map((_, i) => (
-          <button
-            key={i}
-            className={`w-3 h-3 rounded-full ${i === currentImg ? "bg-white" : "bg-gray-400"}`}
-            onClick={(e) => {
-              e.stopPropagation();
-              setCurrentImg(i);
+      <div>
+        {venue.media && venue.media.length > 0 ? (
+          <div
+            className="relative select-none"
+            onClick={() => setCurrentImg((prev) => (prev + 1) % venue.media.length)}
+            onTouchStart={(e) => setTouchStartX(e.touches[0].clientX)}
+            onTouchEnd={(e) => {
+              const touchEndX = e.changedTouches[0].clientX;
+              const diff = touchStartX - touchEndX;
+              if (Math.abs(diff) > 50) {
+                if (diff > 0) {
+                  setCurrentImg((prev) => (prev + 1) % venue.media.length);
+                } else {
+                  setCurrentImg((prev) => (prev - 1 + venue.media.length) % venue.media.length);
+                }
+              }
             }}
-          ></button>
-        ))}
+          >
+            <img
+              src={venue.media[currentImg]?.url || fallbackImage}
+              alt={venue.media[currentImg]?.alt || `Image ${currentImg + 1}`}
+              className="rounded-xl w-full h-96 md:h-[27rem] object-cover cursor-pointer"
+            />
+            <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-2">
+              {venue.media.map((_, i) => (
+                <button
+                  key={i}
+                  className={`w-3 h-3 rounded-full ${i === currentImg ? 'bg-white' : 'bg-gray-400'}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setCurrentImg(i);
+                  }}
+                ></button>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <img
+            src={fallbackImage}
+            alt="Fallback image"
+            className="rounded-xl w-full h-96 md:h-[27rem] object-cover"
+          />
+        )}
       </div>
-    </div>
-  ) : (
-    <img
-      src={fallbackImage}
-      alt="Fallback image"
-      className="rounded-xl w-full h-96 md:h-[27rem] object-cover"
-    />
-  )}
-</div>
-
 
       {/* Info + Booking */}
       <div className="flex flex-col gap-2 pt-6">
         <h1 className="text-2xl font-medium">{venue.name}</h1>
-        <h2>{venue.location.city}, {venue.location.country}</h2>
+        <h2>
+          {venue.location.city}, {venue.location.country}
+        </h2>
         <p className="text-lg font-medium">{venue.maxGuests} Guests</p>
         <p className="text-lg font-medium">{venue.price} NOK / night</p>
 
@@ -248,14 +242,30 @@ export default function VenuePage() {
       <div className="md:col-span-2">
         <h2 className="text-2xl font-semibold mb-2">Facilities</h2>
         <ul className="list-none mb-6 space-y-2">
-          {venue.meta.wifi && <li className="flex items-center gap-2 text-blackish"><FontAwesomeIcon icon={faWifi} /> Wifi</li>}
-          {venue.meta.pets && <li className="flex items-center gap-2 text-blackish"><FontAwesomeIcon icon={faDog} /> Pets allowed</li>}
-          {venue.meta.parking && <li className="flex items-center gap-2 text-blackish"><FontAwesomeIcon icon={faParking} /> Parking</li>}
-          {venue.meta.breakfast && <li className="flex items-center gap-2 text-blackish"><FontAwesomeIcon icon={faCoffee} /> Breakfast</li>}
+          {venue.meta.wifi && (
+            <li className="flex items-center gap-2 text-blackish">
+              <FontAwesomeIcon icon={faWifi} /> Wifi
+            </li>
+          )}
+          {venue.meta.pets && (
+            <li className="flex items-center gap-2 text-blackish">
+              <FontAwesomeIcon icon={faDog} /> Pets allowed
+            </li>
+          )}
+          {venue.meta.parking && (
+            <li className="flex items-center gap-2 text-blackish">
+              <FontAwesomeIcon icon={faParking} /> Parking
+            </li>
+          )}
+          {venue.meta.breakfast && (
+            <li className="flex items-center gap-2 text-blackish">
+              <FontAwesomeIcon icon={faCoffee} /> Breakfast
+            </li>
+          )}
         </ul>
         <h2 className="text-2xl font-semibold mb-2">About</h2>
         <p className="mb-4">{venue.description}</p>
-        <p className="text-md font-normal pb-6">Hosted by {venue.owner?.name || "Unknown"}</p>
+        <p className="text-md font-normal pb-6">Hosted by {venue.owner?.name || 'Unknown'}</p>
       </div>
 
       {/* Confirm Modal */}
@@ -263,12 +273,17 @@ export default function VenuePage() {
         <ModalShell onClose={() => setShowConfirmModal(false)}>
           <h1 className="text-center font-semibold pt-10 mb-2 text-xl">Confirm booking</h1>
           <p className="mb-4 text-center">
-            {nights} night{nights > 1 && "s"} x {venue.price} NOK<br />
+            {nights} night{nights > 1 && 's'} x {venue.price} NOK
+            <br />
             <strong>Total: {totalPrice} NOK</strong>
           </p>
           <div className="flex justify-center gap-4 px-16">
-            <button onClick={() => setShowConfirmModal(false)} className="btn btn-secondary w-full">Cancel</button>
-            <button onClick={handleBookingConfirm} className="btn btn-primary w-full">Reserve</button>
+            <button onClick={() => setShowConfirmModal(false)} className="btn btn-secondary w-full">
+              Cancel
+            </button>
+            <button onClick={handleBookingConfirm} className="btn btn-primary w-full">
+              Reserve
+            </button>
           </div>
         </ModalShell>
       )}
@@ -276,11 +291,22 @@ export default function VenuePage() {
       {/* Success Modal */}
       {showSuccessModal && (
         <ModalShell onClose={() => setShowSuccessModal(false)}>
-          <h1 className="text-center font-semibold pt-10 mb-2 text-xl">Success! Your stay is booked.</h1>
-          <p className="text-center mb-4 font-extralight">A confirmation has been sent to your email.</p>
+          <h1 className="text-center font-semibold pt-10 mb-2 text-xl">
+            Success! Your stay is booked.
+          </h1>
+          <p className="text-center mb-4 font-extralight">
+            A confirmation has been sent to your email.
+          </p>
           <div className="flex flex-col gap-3 px-16">
-            <button onClick={() => (window.location.href = "/profile")} className="btn btn-primary">View my bookings</button>
-            <button onClick={() => (window.location.href = "/")} className="text-sm underline text-gray-600 hover:text-black">Go back home</button>
+            <button onClick={() => (window.location.href = '/profile')} className="btn btn-primary">
+              View my bookings
+            </button>
+            <button
+              onClick={() => (window.location.href = '/')}
+              className="text-sm underline text-gray-600 hover:text-black"
+            >
+              Go back home
+            </button>
           </div>
         </ModalShell>
       )}
@@ -288,14 +314,24 @@ export default function VenuePage() {
       {/* Login Required Modal */}
       {showLoginModal && (
         <ModalShell onClose={() => setShowLoginModal(false)}>
-          <h1 className="text-center font-semibold pt-10 mb-2 text-xl">Hold on! You need to log in</h1>
-          <p className="text-center mb-4 font-extralight">Sign in to continue – it only takes a moment!</p>
+          <h1 className="text-center font-semibold pt-10 mb-2 text-xl">
+            Hold on! You need to log in
+          </h1>
+          <p className="text-center mb-4 font-extralight">
+            Sign in to continue – it only takes a moment!
+          </p>
           <div className="flex justify-center gap-3 px-16">
-            <button onClick={() => (window.location.href = "/login")} className="btn w-full btn-primary">
+            <button
+              onClick={() => (window.location.href = '/login')}
+              className="btn w-full btn-primary"
+            >
               Log in
             </button>
-            <button onClick={() => (window.location.href = "/register")} className="btn w-full btn-primary">
-            Create account
+            <button
+              onClick={() => (window.location.href = '/register')}
+              className="btn w-full btn-primary"
+            >
+              Create account
             </button>
           </div>
           <div
@@ -309,8 +345,3 @@ export default function VenuePage() {
     </div>
   );
 }
-
-
-
-
-

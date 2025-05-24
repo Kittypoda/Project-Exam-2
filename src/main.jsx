@@ -21,8 +21,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="register" element={<Register />} />
           <Route path="managerregister" element={<ManagerRegister />} />
           <Route path="venue/:id" element={<Venue />} />
-          <Route path="profile" element={<Profile />}/>  
-          <Route path="managerprofile" element={<ManagerProfile />}/>              
+          <Route path="profile" element={<Profile />} />
+          <Route path="managerprofile" element={<ManagerProfile />} />
         </Route>
       </Routes>
     </BrowserRouter>

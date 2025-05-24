@@ -1,11 +1,11 @@
-import { Link } from "react-router-dom";
-import fallbackImage from "../assets/fallback.png";
+import { Link } from 'react-router-dom';
+import fallbackImage from '../assets/fallback.png';
 
 export default function VenueCard({ venue }) {
   const hasMedia = Array.isArray(venue.media) && venue.media.length > 0;
   const imageUrl = hasMedia ? venue.media[0]?.url : null;
   const alt = hasMedia ? venue.media[0]?.alt || venue.name : venue.name;
-  const location = venue.location?.city || venue.location?.country || "Unknown";
+  const location = venue.location?.city || venue.location?.country || 'Unknown';
 
   return (
     <Link to={`/venue/${venue.id}`} className="block">
@@ -17,23 +17,13 @@ export default function VenueCard({ venue }) {
         />
 
         {/* Venue name */}
-        <div className="font-alexandria text-black text-lg truncate">
-          {venue.name}
-        </div>
+        <div className="font-alexandria text-black text-lg truncate">{venue.name}</div>
 
         {/* Location always visible */}
-        <div className="font-alexandria text-black text-sm truncate">
-          {location}
-        </div>
+        <div className="font-alexandria text-black text-sm truncate">{location}</div>
 
-        <p className="text-sm font-extralight mt-auto">
-          {venue.price} kr / night
-        </p>
+        <p className="text-sm font-extralight mt-auto">{venue.price} kr / night</p>
       </div>
     </Link>
   );
 }
-
-
-
-

@@ -1,22 +1,22 @@
-import { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import CreateVenueForm from "../components/CreateVenueForm";
-import MyVenuesList from "../components/MyVenuesList";
-import UpcomingBookings from "../components/UpcomingBookings";
-import { API_KEY, BASE_URL } from "../utils/api";
+import { useEffect, useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import CreateVenueForm from '../components/CreateVenueForm';
+import MyVenuesList from '../components/MyVenuesList';
+import UpcomingBookings from '../components/UpcomingBookings';
+import { API_KEY, BASE_URL } from '../utils/api';
 
 export default function ManagerProfile() {
   const navigate = useNavigate();
   const [isAuthorized, setIsAuthorized] = useState(true);
 
-  const userName = localStorage.getItem("userName");
-  const accessToken = localStorage.getItem("accessToken");
-  const isVenueManager = localStorage.getItem("isVenueManager") === "true";
+  const userName = localStorage.getItem('userName');
+  const accessToken = localStorage.getItem('accessToken');
+  const isVenueManager = localStorage.getItem('isVenueManager') === 'true';
 
-  const [activeSection, setActiveSection] = useState("createVenue");
-  const [avatarUrl, setAvatarUrl] = useState(localStorage.getItem("avatarUrl") || "");
-  const [bio, setBio] = useState("");
-  const [status, setStatus] = useState("");
+  const [activeSection, setActiveSection] = useState('createVenue');
+  const [avatarUrl, setAvatarUrl] = useState(localStorage.getItem('avatarUrl') || '');
+  const [bio, setBio] = useState('');
+  const [status, setStatus] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [travelerBookings, setTravelerBookings] = useState([]);
 
@@ -28,7 +28,7 @@ export default function ManagerProfile() {
 
   useEffect(() => {
     if (!isAuthorized) {
-      navigate("/profile");
+      navigate('/profile');
     }
   }, [isAuthorized, navigate]);
 
@@ -38,17 +38,17 @@ export default function ManagerProfile() {
         const response = await fetch(`${BASE_URL}/holidaze/profiles/${userName}`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
-            "X-Noroff-API-Key": API_KEY,
+            'X-Noroff-API-Key': API_KEY,
           },
         });
 
         const data = await response.json();
-        if (!response.ok) throw new Error(data.errors?.[0]?.message || "Failed to fetch profile");
+        if (!response.ok) throw new Error(data.errors?.[0]?.message || 'Failed to fetch profile');
 
-        setAvatarUrl(data.data.avatar?.url || "");
-        setBio(data.data.bio || "");
+        setAvatarUrl(data.data.avatar?.url || '');
+        setBio(data.data.bio || '');
       } catch (err) {
-        console.error("Failed to fetch profile:", err);
+        console.error('Failed to fetch profile:', err);
       }
     }
 
@@ -65,23 +65,21 @@ export default function ManagerProfile() {
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
-              "X-Noroff-API-Key": API_KEY,
+              'X-Noroff-API-Key': API_KEY,
             },
           }
         );
 
         const data = await response.json();
         if (!response.ok) {
-          throw new Error(data.errors?.[0]?.message || "Failed to fetch bookings");
+          throw new Error(data.errors?.[0]?.message || 'Failed to fetch bookings');
         }
 
-        const sorted = data.data.sort(
-          (a, b) => new Date(a.dateFrom) - new Date(b.dateFrom)
-        );
+        const sorted = data.data.sort((a, b) => new Date(a.dateFrom) - new Date(b.dateFrom));
 
         setTravelerBookings(sorted);
       } catch (err) {
-        console.error("Traveler bookings fetch error:", err);
+        console.error('Traveler bookings fetch error:', err);
       }
     }
 
@@ -92,15 +90,15 @@ export default function ManagerProfile() {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-    setStatus("");
+    setStatus('');
 
     try {
       const response = await fetch(`${BASE_URL}/holidaze/profiles/${userName}`, {
-        method: "PUT",
+        method: 'PUT',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${accessToken}`,
-          "X-Noroff-API-Key": API_KEY,
+          'X-Noroff-API-Key': API_KEY,
         },
         body: JSON.stringify({
           bio,
@@ -112,19 +110,19 @@ export default function ManagerProfile() {
       });
 
       const data = await response.json();
-      if (!response.ok) throw new Error(data.errors?.[0]?.message || "Update failed");
+      if (!response.ok) throw new Error(data.errors?.[0]?.message || 'Update failed');
 
-      localStorage.setItem("avatarUrl", data.data.avatar?.url || "");
+      localStorage.setItem('avatarUrl', data.data.avatar?.url || '');
       setIsModalOpen(false);
     } catch (err) {
-      console.error("Update error:", err);
-      setStatus(err.message || "Something went wrong");
+      console.error('Update error:', err);
+      setStatus(err.message || 'Something went wrong');
     }
   };
 
   const groupedTravelerBookings = travelerBookings.reduce((acc, booking) => {
     const date = new Date(booking.dateFrom);
-    const key = date.toLocaleString("default", { month: "long", year: "numeric" });
+    const key = date.toLocaleString('default', { month: 'long', year: 'numeric' });
     if (!acc[key]) acc[key] = [];
     acc[key].push(booking);
     return acc;
@@ -136,16 +134,14 @@ export default function ManagerProfile() {
       <aside className="bg-lightgray px-5 p-6 md:col-span-1">
         <div className="text-center pt-6">
           <img
-            src={avatarUrl || "https://placehold.co/150x150?text=Avatar"}
+            src={avatarUrl || 'https://placehold.co/150x150?text=Avatar'}
             alt="Avatar"
             className="w-24 h-24 mx-auto rounded-full object-cover border"
           />
           <h2 className="text-lg font-semibold pt-2">
             {userName} <span className="font-normal">Venue Manager</span>
           </h2>
-          <p className="text-sm py-4 text-gray-600">
-            {bio || <span>No bio added yet.</span>}
-          </p>
+          <p className="text-sm py-4 text-gray-600">{bio || <span>No bio added yet.</span>}</p>
           <button
             onClick={() => setIsModalOpen(true)}
             className="text-sm underline font-alexandria text-blackish mb-4"
@@ -153,7 +149,7 @@ export default function ManagerProfile() {
             Edit profile
           </button>
           <button
-            onClick={() => handleSectionChange("createVenue")}
+            onClick={() => handleSectionChange('createVenue')}
             className="btn btn-primary w-full mb-6"
           >
             Add a venue
@@ -162,20 +158,20 @@ export default function ManagerProfile() {
 
         <nav className="space-y-4">
           <button
-            onClick={() => handleSectionChange("myVenues")}
+            onClick={() => handleSectionChange('myVenues')}
             className="block font-alexandria w-full text-left hover:underline"
           >
             My venues
           </button>
           <button
-            onClick={() => handleSectionChange("bookings")}
+            onClick={() => handleSectionChange('bookings')}
             className="block w-full text-left font-alexandria hover:underline"
           >
             Upcoming bookings
           </button>
           <h3 className="font-semibold font-alexandria pt-10 mb-2 text-xl">Traveler</h3>
           <button
-            onClick={() => handleSectionChange("travelerBookings")}
+            onClick={() => handleSectionChange('travelerBookings')}
             className="block font-alexandria w-full text-left hover:underline"
           >
             My upcoming bookings
@@ -185,10 +181,10 @@ export default function ManagerProfile() {
 
       {/* Right Panel */}
       <main className="md:col-span-2 md:p-6">
-        {activeSection === "createVenue" && <CreateVenueForm />}
-        {activeSection === "myVenues" && <MyVenuesList />}
-        {activeSection === "bookings" && <UpcomingBookings />}
-        {activeSection === "travelerBookings" && (
+        {activeSection === 'createVenue' && <CreateVenueForm />}
+        {activeSection === 'myVenues' && <MyVenuesList />}
+        {activeSection === 'bookings' && <UpcomingBookings />}
+        {activeSection === 'travelerBookings' && (
           <>
             <h1 className="text-xl font-normal pb-10 pt-6">My upcoming bookings</h1>
             {Object.keys(groupedTravelerBookings).length === 0 ? (
@@ -203,7 +199,7 @@ export default function ManagerProfile() {
                       const dateFrom = new Date(booking.dateFrom);
                       const dateTo = new Date(booking.dateTo);
                       const formatDate = (date) =>
-                        `${date.getDate()}. ${date.toLocaleString("default", { month: "short" })}`;
+                        `${date.getDate()}. ${date.toLocaleString('default', { month: 'short' })}`;
 
                       return (
                         <Link
@@ -212,8 +208,8 @@ export default function ManagerProfile() {
                           className="flex gap-4 items-center transition"
                         >
                           <img
-                            src={venue?.media?.[0]?.url || "https://placehold.co/100x100"}
-                            alt={venue?.media?.[0]?.alt || "Venue image"}
+                            src={venue?.media?.[0]?.url || 'https://placehold.co/100x100'}
+                            alt={venue?.media?.[0]?.alt || 'Venue image'}
                             className="w-32 h-32 rounded-xl object-cover"
                           />
                           <div>
@@ -279,4 +275,3 @@ export default function ManagerProfile() {
     </div>
   );
 }
-

@@ -1,21 +1,21 @@
-import { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { API_KEY, BASE_URL } from "../utils/api";
-import ModalShell from "./ModalShell";
+import { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { API_KEY, BASE_URL } from '../utils/api';
+import ModalShell from './ModalShell';
 
 export default function CreateVenueForm() {
-  const accessToken = localStorage.getItem("accessToken");
+  const accessToken = localStorage.getItem('accessToken');
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [media, setMedia] = useState([{ url: "", alt: "" }]);
-  const [price, setPrice] = useState("");
-  const [maxGuests, setMaxGuests] = useState("");
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [media, setMedia] = useState([{ url: '', alt: '' }]);
+  const [price, setPrice] = useState('');
+  const [maxGuests, setMaxGuests] = useState('');
   const [meta, setMeta] = useState({ wifi: false, parking: false, breakfast: false, pets: false });
-  const [venueLocation, setVenueLocation] = useState({ city: "" });
-  const [status, setStatus] = useState("");
+  const [venueLocation, setVenueLocation] = useState({ city: '' });
+  const [status, setStatus] = useState('');
   const [showModal, setShowModal] = useState(false);
 
   const handleMetaChange = (facility) => {
@@ -29,28 +29,25 @@ export default function CreateVenueForm() {
   };
 
   const handleAddMedia = () => {
-    setMedia([...media, { url: "", alt: "" }]);
+    setMedia([...media, { url: '', alt: '' }]);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setStatus("");
+    setStatus('');
 
     const guestsNum = Number(maxGuests);
     const priceNum = Number(price);
 
-    if (
-      isNaN(guestsNum) || guestsNum <= 0 ||
-      isNaN(priceNum) || priceNum < 0
-    ) {
-      setStatus("Please enter valid positive numbers for guests and price.");
+    if (isNaN(guestsNum) || guestsNum <= 0 || isNaN(priceNum) || priceNum < 0) {
+      setStatus('Please enter valid positive numbers for guests and price.');
       return;
     }
 
     const body = {
       name,
       description,
-      media: media.filter((m) => m.url.trim() !== ""),
+      media: media.filter((m) => m.url.trim() !== ''),
       price: priceNum,
       maxGuests: guestsNum,
       meta,
@@ -59,11 +56,11 @@ export default function CreateVenueForm() {
 
     try {
       const response = await fetch(`${BASE_URL}/holidaze/venues`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${accessToken}`,
-          "X-Noroff-API-Key": API_KEY,
+          'X-Noroff-API-Key': API_KEY,
         },
         body: JSON.stringify(body),
       });
@@ -71,16 +68,16 @@ export default function CreateVenueForm() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.errors?.[0]?.message || "Something went wrong");
+        throw new Error(data.errors?.[0]?.message || 'Something went wrong');
       }
 
-      setName("");
-      setDescription("");
-      setMedia([{ url: "", alt: "" }]);
-      setPrice("");
-      setMaxGuests("");
+      setName('');
+      setDescription('');
+      setMedia([{ url: '', alt: '' }]);
+      setPrice('');
+      setMaxGuests('');
       setMeta({ wifi: false, parking: false, breakfast: false, pets: false });
-      setVenueLocation({ city: "" });
+      setVenueLocation({ city: '' });
       setShowModal(true);
     } catch (err) {
       setStatus(err.message);
@@ -132,7 +129,7 @@ export default function CreateVenueForm() {
                 type="button"
                 key={key}
                 onClick={() => handleMetaChange(key)}
-                className={`px-4 py-2 font-alexandria font-light text-black text-sm rounded shadow hover:bg-mintgreen ${value ? "bg-mintgreen" : "bg-white"}`}
+                className={`px-4 py-2 font-alexandria font-light text-black text-sm rounded shadow hover:bg-mintgreen ${value ? 'bg-mintgreen' : 'bg-white'}`}
               >
                 {key.charAt(0).toUpperCase() + key.slice(1)}
               </button>
@@ -170,17 +167,21 @@ export default function CreateVenueForm() {
                 className="form-input w-full text-black"
                 placeholder="Image URL"
                 value={m.url}
-                onChange={(e) => handleMediaChange(i, "url", e.target.value)}
+                onChange={(e) => handleMediaChange(i, 'url', e.target.value)}
               />
               <input
                 className="form-input w-full"
                 placeholder="Alt text"
                 value={m.alt}
-                onChange={(e) => handleMediaChange(i, "alt", e.target.value)}
+                onChange={(e) => handleMediaChange(i, 'alt', e.target.value)}
               />
             </div>
           ))}
-          <button type="button" className="text-sm underline font-alexandria text-blackish" onClick={handleAddMedia}>
+          <button
+            type="button"
+            className="text-sm underline font-alexandria text-blackish"
+            onClick={handleAddMedia}
+          >
             + Add more
           </button>
         </div>
@@ -196,23 +197,22 @@ export default function CreateVenueForm() {
         <ModalShell>
           <div className="text-center space-y-4 p-6">
             <h1 className="text-xl font-medium pt-4">Venue Created!</h1>
-            <p className="text-sm font-extralight">Your venue is now visible to guests. You can edit it anytime.</p>
+            <p className="text-sm font-extralight">
+              Your venue is now visible to guests. You can edit it anytime.
+            </p>
             <button
               className="btn btn-primary w-full"
               onClick={() => {
-                if (location.pathname === "/managerprofile") {
+                if (location.pathname === '/managerprofile') {
                   setShowModal(false);
                 } else {
-                  navigate("/managerprofile");
+                  navigate('/managerprofile');
                 }
               }}
             >
               Back to profile page
             </button>
-            <p
-              onClick={() => navigate("/")}
-              className="text-sm underline cursor-pointer"
-            >
+            <p onClick={() => navigate('/')} className="text-sm underline cursor-pointer">
               Or go to homepage
             </p>
           </div>
@@ -221,6 +221,3 @@ export default function CreateVenueForm() {
     </>
   );
 }
-
-
-

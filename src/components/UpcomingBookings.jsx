@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
-import { API_KEY, BASE_URL } from "../utils/api";
-import fallbackImage from "../assets/fallback.png";
+import { useEffect, useState } from 'react';
+import { API_KEY, BASE_URL } from '../utils/api';
+import fallbackImage from '../assets/fallback.png';
 
 export default function UpcomingBookings() {
-  const userName = localStorage.getItem("userName");
-  const accessToken = localStorage.getItem("accessToken");
+  const userName = localStorage.getItem('userName');
+  const accessToken = localStorage.getItem('accessToken');
   const [groupedBookings, setGroupedBookings] = useState({});
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   useEffect(() => {
     async function fetchManagerBookings() {
@@ -16,13 +16,13 @@ export default function UpcomingBookings() {
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
-              "X-Noroff-API-Key": API_KEY,
+              'X-Noroff-API-Key': API_KEY,
             },
           }
         );
 
         const data = await res.json();
-        if (!res.ok) throw new Error(data.errors?.[0]?.message || "Failed to fetch bookings");
+        if (!res.ok) throw new Error(data.errors?.[0]?.message || 'Failed to fetch bookings');
 
         const allBookings = data.data.flatMap((venue) =>
           (venue.bookings || []).map((booking) => ({
@@ -31,16 +31,14 @@ export default function UpcomingBookings() {
           }))
         );
 
-        const sorted = allBookings.sort(
-          (a, b) => new Date(a.dateFrom) - new Date(b.dateFrom)
-        );
+        const sorted = allBookings.sort((a, b) => new Date(a.dateFrom) - new Date(b.dateFrom));
 
         const grouped = {};
         sorted.forEach((booking) => {
           const date = new Date(booking.dateFrom);
-          const key = date.toLocaleString("en-US", {
-            month: "long",
-            year: "numeric",
+          const key = date.toLocaleString('en-US', {
+            month: 'long',
+            year: 'numeric',
           });
 
           if (!grouped[key]) grouped[key] = [];
@@ -69,26 +67,28 @@ export default function UpcomingBookings() {
 
           <div className="space-y-4 mt-2">
             {bookings.map((booking) => {
-              const dateFrom = new Date(booking.dateFrom).toLocaleDateString("no-NO", {
-                day: "numeric",
-                month: "long",
+              const dateFrom = new Date(booking.dateFrom).toLocaleDateString('no-NO', {
+                day: 'numeric',
+                month: 'long',
               });
-              const dateTo = new Date(booking.dateTo).toLocaleDateString("no-NO", {
-                day: "numeric",
-                month: "long",
+              const dateTo = new Date(booking.dateTo).toLocaleDateString('no-NO', {
+                day: 'numeric',
+                month: 'long',
               });
 
               return (
                 <div key={booking.id} className="flex gap-4 items-start">
                   <img
                     src={booking.venue.media?.[0]?.url || fallbackImage}
-                    alt={booking.venue.media?.[0]?.alt || "Venue image"}
+                    alt={booking.venue.media?.[0]?.alt || 'Venue image'}
                     className="w-32 h-32 object-cover rounded-xl"
                   />
                   <div className="text-sm space-y-1">
                     <p className="font-semibold">{booking.venue.name}</p>
-                    <p>{booking.customer?.name || "Unknown guest"}</p>
-                    <p>{dateFrom} - {dateTo}</p>
+                    <p>{booking.customer?.name || 'Unknown guest'}</p>
+                    <p>
+                      {dateFrom} - {dateTo}
+                    </p>
                     <p>Guests: {booking.guests}</p>
                   </div>
                 </div>
@@ -100,4 +100,3 @@ export default function UpcomingBookings() {
     </div>
   );
 }
-

@@ -1,36 +1,35 @@
-import { useEffect, useState } from "react";
-import { API_KEY, BASE_URL } from "../utils/api";
-import { Link, useNavigate } from "react-router-dom";
-import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
-import "../styles/reactCalendar.css";
+import { useEffect, useState } from 'react';
+import { API_KEY, BASE_URL } from '../utils/api';
+import { Link, useNavigate } from 'react-router-dom';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
+import '../styles/reactCalendar.css';
 
 export default function Profile() {
-  const userName = localStorage.getItem("userName");
-  const accessToken = localStorage.getItem("accessToken");
-  const isVenueManager = localStorage.getItem("isVenueManager") === "true";
-
+  const userName = localStorage.getItem('userName');
+  const accessToken = localStorage.getItem('accessToken');
+  const isVenueManager = localStorage.getItem('isVenueManager') === 'true';
 
   const navigate = useNavigate();
 
   const [profile, setProfile] = useState(null);
-  const [bio, setBio] = useState("");
-  const [avatarUrl, setAvatarUrl] = useState("");
-  const [status, setStatus] = useState("");
+  const [bio, setBio] = useState('');
+  const [avatarUrl, setAvatarUrl] = useState('');
+  const [status, setStatus] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
     if (isVenueManager) {
-      navigate("/managerprofile");
+      navigate('/managerprofile');
     }
   }, [isVenueManager, navigate]);
 
   useEffect(() => {
     async function fetchProfile() {
       if (!userName || !accessToken) {
-        setError("You must be logged in.");
+        setError('You must be logged in.');
         return;
       }
 
@@ -38,23 +37,23 @@ export default function Profile() {
         const response = await fetch(`${BASE_URL}/holidaze/profiles/${userName}`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
-            "X-Noroff-API-Key": API_KEY,
+            'X-Noroff-API-Key': API_KEY,
           },
         });
 
         const data = await response.json();
 
-        if (response.status === 404) throw new Error("Profile not found – does this user exist?");
-        if (!response.ok) throw new Error(data.errors?.[0]?.message || "Failed to fetch profile");
+        if (response.status === 404) throw new Error('Profile not found – does this user exist?');
+        if (!response.ok) throw new Error(data.errors?.[0]?.message || 'Failed to fetch profile');
         if (!data.data) throw new Error("Missing 'data' in response");
 
         setProfile(data.data);
-        setBio(data.data.bio || "");
-        setAvatarUrl(data.data.avatar?.url || "");
-        setError("");
+        setBio(data.data.bio || '');
+        setAvatarUrl(data.data.avatar?.url || '');
+        setError('');
       } catch (err) {
-        console.error("Failed to fetch profile:", err);
-        setError(err.message || "Something went wrong");
+        console.error('Failed to fetch profile:', err);
+        setError(err.message || 'Something went wrong');
       }
     }
 
@@ -71,7 +70,7 @@ export default function Profile() {
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
-              "X-Noroff-API-Key": API_KEY,
+              'X-Noroff-API-Key': API_KEY,
             },
           }
         );
@@ -79,16 +78,14 @@ export default function Profile() {
         const data = await response.json();
 
         if (!response.ok) {
-          throw new Error(data.errors?.[0]?.message || "Failed to fetch bookings");
+          throw new Error(data.errors?.[0]?.message || 'Failed to fetch bookings');
         }
 
-        const sorted = data.data.sort(
-          (a, b) => new Date(a.dateFrom) - new Date(b.dateFrom)
-        );
+        const sorted = data.data.sort((a, b) => new Date(a.dateFrom) - new Date(b.dateFrom));
 
         setBookings(sorted);
       } catch (err) {
-        console.error("Booking fetch error:", err);
+        console.error('Booking fetch error:', err);
       }
     }
 
@@ -97,15 +94,15 @@ export default function Profile() {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-    setStatus("");
+    setStatus('');
 
     try {
       const response = await fetch(`${BASE_URL}/holidaze/profiles/${userName}`, {
-        method: "PUT",
+        method: 'PUT',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${accessToken}`,
-          "X-Noroff-API-Key": API_KEY,
+          'X-Noroff-API-Key': API_KEY,
         },
         body: JSON.stringify({
           bio,
@@ -119,16 +116,16 @@ export default function Profile() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.errors?.[0]?.message || "Update failed");
+        throw new Error(data.errors?.[0]?.message || 'Update failed');
       }
 
       setProfile(data.data);
-      localStorage.setItem("avatarUrl", data.data.avatar?.url || "");
-      setStatus("Profile updated!");
+      localStorage.setItem('avatarUrl', data.data.avatar?.url || '');
+      setStatus('Profile updated!');
       setIsModalOpen(false);
     } catch (err) {
-      console.error("Update error:", err);
-      setStatus(err.message || "Something went wrong");
+      console.error('Update error:', err);
+      setStatus(err.message || 'Something went wrong');
     }
   };
 
@@ -142,11 +139,11 @@ export default function Profile() {
 
   const displayName = profile?.name
     ? profile.name.charAt(0).toUpperCase() + profile.name.slice(1)
-    : "";
+    : '';
 
   const groupedBookings = bookings.reduce((acc, booking) => {
     const date = new Date(booking.dateFrom);
-    const key = date.toLocaleString("default", { month: "long", year: "numeric" });
+    const key = date.toLocaleString('default', { month: 'long', year: 'numeric' });
 
     if (!acc[key]) acc[key] = [];
     acc[key].push(booking);
@@ -178,21 +175,16 @@ export default function Profile() {
     <>
       <div className="max-w-md mx-auto text-center mt-12 p-10">
         <img
-          src={profile.avatar?.url || "https://placehold.co/150x150?text=Avatar"}
-          alt={profile.avatar?.alt || "Avatar"}
+          src={profile.avatar?.url || 'https://placehold.co/150x150?text=Avatar'}
+          alt={profile.avatar?.alt || 'Avatar'}
           className="w-32 h-32 mx-auto rounded-full object-cover border"
         />
 
         <h1 className="text-xl pt-2">{displayName}</h1>
 
-        <p className="text-sm pt-2 pb-6">
-          {profile.bio || <span>No bio added yet.</span>}
-        </p>
+        <p className="text-sm pt-2 pb-6">{profile.bio || <span>No bio added yet.</span>}</p>
 
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="btn btn-primary w-full"
-        >
+        <button onClick={() => setIsModalOpen(true)} className="btn btn-primary w-full">
           Edit profile
         </button>
       </div>
@@ -215,8 +207,8 @@ export default function Profile() {
                     const dateTo = new Date(booking.dateTo);
 
                     const formatDate = (date) =>
-                      `${date.getDate()}. ${date.toLocaleString("default", {
-                        month: "short",
+                      `${date.getDate()}. ${date.toLocaleString('default', {
+                        month: 'short',
                       })}`;
 
                     return (
@@ -226,8 +218,8 @@ export default function Profile() {
                         className="flex gap-4 items-center p-4 transition"
                       >
                         <img
-                          src={venue?.media?.[0]?.url || "https://placehold.co/100x100"}
-                          alt={venue?.media?.[0]?.alt || "Venue image"}
+                          src={venue?.media?.[0]?.url || 'https://placehold.co/100x100'}
+                          alt={venue?.media?.[0]?.alt || 'Venue image'}
                           className="w-24 h-24 rounded object-cover"
                         />
                         <div>
@@ -257,15 +249,10 @@ export default function Profile() {
               if (bookingsForDate.length === 0) return null;
 
               const tooltipText = bookingsForDate
-                .map((b) => `${b.venue.name} (${b.venue.location?.city || "Unknown"})`)
-                .join(", ");
+                .map((b) => `${b.venue.name} (${b.venue.location?.city || 'Unknown'})`)
+                .join(', ');
 
-              return (
-                <div
-                  className="absolute inset-0"
-                  title={tooltipText} 
-                />
-              );
+              return <div className="absolute inset-0" title={tooltipText} />;
             }}
             tileClassName={({ date }) => {
               const isBooked = bookedDates.some(
@@ -274,7 +261,7 @@ export default function Profile() {
                   d.getMonth() === date.getMonth() &&
                   d.getDate() === date.getDate()
               );
-              return isBooked ? "custom-booked relative" : null;
+              return isBooked ? 'custom-booked relative' : null;
             }}
           />
         </div>
@@ -284,10 +271,7 @@ export default function Profile() {
         <div className="fixed inset-0 bg-black bg-opacity-20 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-xl max-w-xl w-full space-y-4 shadow-lg">
             <div className="flex justify-end">
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="text-sm font-alexandria"
-              >
+              <button onClick={() => setIsModalOpen(false)} className="text-sm font-alexandria">
                 Close
               </button>
             </div>
@@ -329,10 +313,3 @@ export default function Profile() {
     </>
   );
 }
-
-
-
-
-
-
-

@@ -1,14 +1,12 @@
- /** @type {import('tailwindcss').Config} */
- module.exports = {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,jsx}",
-  ],
+// tailwind.config.js
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: ['./index.html', './src/**/*.{js,jsx}'],
   theme: {
     extend: {
       fontFamily: {
         logo: ['"Racing Sans One"', 'sans-serif'],
-        alexandria: ['"Alexandria", sans-serif'], 
+        alexandria: ['"Alexandria", sans-serif'],
       },
       fontSize: {
         h1: ['30px', { lineHeight: '1.2' }],
