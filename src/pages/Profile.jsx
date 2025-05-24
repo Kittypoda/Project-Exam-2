@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { API_KEY, BASE_URL } from "../utils/api";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "../styles/reactCalendar.css";
@@ -8,6 +8,10 @@ import "../styles/reactCalendar.css";
 export default function Profile() {
   const userName = localStorage.getItem("userName");
   const accessToken = localStorage.getItem("accessToken");
+  const isVenueManager = localStorage.getItem("isVenueManager") === "true";
+
+
+  const navigate = useNavigate();
 
   const [profile, setProfile] = useState(null);
   const [bio, setBio] = useState("");
@@ -16,6 +20,12 @@ export default function Profile() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [error, setError] = useState("");
   const [bookings, setBookings] = useState([]);
+
+  useEffect(() => {
+    if (isVenueManager) {
+      navigate("/managerprofile");
+    }
+  }, [isVenueManager, navigate]);
 
   useEffect(() => {
     async function fetchProfile() {

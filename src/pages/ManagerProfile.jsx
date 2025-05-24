@@ -3,10 +3,20 @@ import CreateVenueForm from "../components/CreateVenueForm";
 import MyVenuesList from "../components/MyVenuesList";
 import UpcomingBookings from "../components/UpcomingBookings";
 import { API_KEY, BASE_URL } from "../utils/api";
+import { useNavigate } from "react-router-dom";
 
 export default function ManagerProfile() {
   const userName = localStorage.getItem("userName");
   const accessToken = localStorage.getItem("accessToken");
+  const isVenueManager = localStorage.getItem("isVenueManager") === "true";
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isVenueManager) {
+      navigate("/profile");
+    }
+  }, [isVenueManager, navigate]);
 
   const [activeSection, setActiveSection] = useState("createVenue");
   const [avatarUrl, setAvatarUrl] = useState(localStorage.getItem("avatarUrl") || "");
@@ -174,4 +184,8 @@ export default function ManagerProfile() {
       )}
     </div>
   );
+
 }
+
+
+
