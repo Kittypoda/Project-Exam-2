@@ -183,7 +183,7 @@ export default function VenuePage() {
       <div className="flex flex-col gap-2 pt-6">
         <h1 className="text-2xl font-medium">{venue.name}</h1>
         <h2>
-          {venue.location.city}, {venue.location.country}
+          {venue.location.city} {venue.location.country}
         </h2>
         <p className="text-lg font-medium">{venue.maxGuests} Guests</p>
         <p className="text-lg font-medium">{venue.price} NOK / night</p>

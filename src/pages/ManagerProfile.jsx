@@ -4,6 +4,7 @@ import CreateVenueForm from '../components/CreateVenueForm';
 import MyVenuesList from '../components/MyVenuesList';
 import UpcomingBookings from '../components/UpcomingBookings';
 import { API_KEY, BASE_URL } from '../utils/api';
+import fallbackImage from '../assets/fallback.png';
 
 export default function ManagerProfile() {
   const navigate = useNavigate();
@@ -208,8 +209,8 @@ export default function ManagerProfile() {
                           className="flex gap-4 items-center transition"
                         >
                           <img
-                            src={venue?.media?.[0]?.url || 'https://placehold.co/100x100'}
-                            alt={venue?.media?.[0]?.alt || 'Venue image'}
+                            src={venue.media?.[0]?.url || fallbackImage}
+                            alt={venue.media?.[0]?.alt || 'Venue image'}
                             className="w-32 h-32 rounded-xl object-cover"
                           />
                           <div>
