@@ -1,28 +1,36 @@
 import { useEffect, useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import CreateVenueForm from "../components/CreateVenueForm";
 import MyVenuesList from "../components/MyVenuesList";
 import UpcomingBookings from "../components/UpcomingBookings";
 import { API_KEY, BASE_URL } from "../utils/api";
-import { useNavigate } from "react-router-dom";
 
 export default function ManagerProfile() {
+  const navigate = useNavigate();
+  const [isAuthorized, setIsAuthorized] = useState(true);
+
   const userName = localStorage.getItem("userName");
   const accessToken = localStorage.getItem("accessToken");
   const isVenueManager = localStorage.getItem("isVenueManager") === "true";
-
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!isVenueManager) {
-      navigate("/profile");
-    }
-  }, [isVenueManager, navigate]);
 
   const [activeSection, setActiveSection] = useState("createVenue");
   const [avatarUrl, setAvatarUrl] = useState(localStorage.getItem("avatarUrl") || "");
   const [bio, setBio] = useState("");
   const [status, setStatus] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [travelerBookings, setTravelerBookings] = useState([]);
+
+  useEffect(() => {
+    if (!isVenueManager) {
+      setIsAuthorized(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!isAuthorized) {
+      navigate("/profile");
+    }
+  }, [isAuthorized, navigate]);
 
   useEffect(() => {
     async function fetchProfile() {
@@ -47,9 +55,40 @@ export default function ManagerProfile() {
     fetchProfile();
   }, [userName, accessToken]);
 
-  const handleSectionChange = (section) => {
-    setActiveSection(section);
-  };
+  useEffect(() => {
+    async function fetchTravelerBookings() {
+      if (!userName || !accessToken) return;
+
+      try {
+        const response = await fetch(
+          `${BASE_URL}/holidaze/profiles/${userName}/bookings?_venue=true`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              "X-Noroff-API-Key": API_KEY,
+            },
+          }
+        );
+
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.errors?.[0]?.message || "Failed to fetch bookings");
+        }
+
+        const sorted = data.data.sort(
+          (a, b) => new Date(a.dateFrom) - new Date(b.dateFrom)
+        );
+
+        setTravelerBookings(sorted);
+      } catch (err) {
+        console.error("Traveler bookings fetch error:", err);
+      }
+    }
+
+    fetchTravelerBookings();
+  }, [userName, accessToken]);
+
+  const handleSectionChange = (section) => setActiveSection(section);
 
   const handleUpdate = async (e) => {
     e.preventDefault();
@@ -82,6 +121,14 @@ export default function ManagerProfile() {
       setStatus(err.message || "Something went wrong");
     }
   };
+
+  const groupedTravelerBookings = travelerBookings.reduce((acc, booking) => {
+    const date = new Date(booking.dateFrom);
+    const key = date.toLocaleString("default", { month: "long", year: "numeric" });
+    if (!acc[key]) acc[key] = [];
+    acc[key].push(booking);
+    return acc;
+  }, {});
 
   return (
     <div className="md:grid md:grid-cols-3 max-w-6xl mx-auto min-h-screen pt-4 px-4">
@@ -126,6 +173,13 @@ export default function ManagerProfile() {
           >
             Upcoming bookings
           </button>
+          <h3 className="font-semibold font-alexandria pt-10 mb-2 text-xl">Traveler</h3>
+          <button
+            onClick={() => handleSectionChange("travelerBookings")}
+            className="block font-alexandria w-full text-left hover:underline"
+          >
+            My upcoming bookings
+          </button>
         </nav>
       </aside>
 
@@ -134,16 +188,58 @@ export default function ManagerProfile() {
         {activeSection === "createVenue" && <CreateVenueForm />}
         {activeSection === "myVenues" && <MyVenuesList />}
         {activeSection === "bookings" && <UpcomingBookings />}
+        {activeSection === "travelerBookings" && (
+          <>
+            <h1 className="text-xl font-normal pb-10">My upcoming bookings</h1>
+            {Object.keys(groupedTravelerBookings).length === 0 ? (
+              <p>No bookings yet.</p>
+            ) : (
+              Object.entries(groupedTravelerBookings).map(([monthYear, group]) => (
+                <div key={monthYear} className="mb-6">
+                  <h2 className="text-md font-alexandria mb-2">{monthYear}</h2>
+                  <div className="space-y-4">
+                    {group.map((booking) => {
+                      const venue = booking.venue;
+                      const dateFrom = new Date(booking.dateFrom);
+                      const dateTo = new Date(booking.dateTo);
+                      const formatDate = (date) =>
+                        `${date.getDate()}. ${date.toLocaleString("default", { month: "short" })}`;
+
+                      return (
+                        <Link
+                          to={`/venue/${venue.id}`}
+                          key={booking.id}
+                          className="flex gap-4 items-center transition"
+                        >
+                          <img
+                            src={venue?.media?.[0]?.url || "https://placehold.co/100x100"}
+                            alt={venue?.media?.[0]?.alt || "Venue image"}
+                            className="w-32 h-32 rounded-xl object-cover"
+                          />
+                          <div>
+                            <p className="font-alexandria font-semibold">{venue.name}</p>
+                            <p>
+                              {formatDate(dateFrom)} - {formatDate(dateTo)}
+                            </p>
+                            <p>Guests: {booking.guests}</p>
+                          </div>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))
+            )}
+          </>
+        )}
       </main>
 
+      {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-20 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-xl max-w-xl w-full space-y-4 shadow-lg">
             <div className="flex justify-end">
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="text-sm font-alexandria"
-              >
+              <button onClick={() => setIsModalOpen(false)} className="text-sm font-alexandria">
                 Close
               </button>
             </div>
@@ -166,7 +262,6 @@ export default function ManagerProfile() {
                 className="form-input"
                 placeholder="New image link"
               />
-
               <textarea
                 value={bio}
                 onChange={(e) => setBio(e.target.value)}
@@ -174,7 +269,6 @@ export default function ManagerProfile() {
                 rows="3"
                 placeholder="Write something about yourself..."
               />
-
               <button type="submit" className="btn btn-primary w-full">
                 Save changes
               </button>
@@ -184,8 +278,5 @@ export default function ManagerProfile() {
       )}
     </div>
   );
-
 }
-
-
 

@@ -263,7 +263,7 @@ export default function Profile() {
               return (
                 <div
                   className="absolute inset-0"
-                  title={tooltipText} // dette gjør hele dagen hoverbar
+                  title={tooltipText} 
                 />
               );
             }}
