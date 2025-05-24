@@ -73,7 +73,7 @@ export default function EditVenueModal({ venue, onClose, onUpdate }) {
   return (
     <div className="fixed inset-0 bg-black/50 z-50 overflow-y-auto flex items-center justify-center p-4">
       <div className="bg-white rounded-xl shadow-lg p-8 max-w-2xl w-full relative max-h-[90vh] overflow-y-auto">
-        <button onClick={onClose} className="absolute top-4 right-4 text-sm underline">
+        <button onClick={onClose} className="absolute top-4 right-4 text-sm font-alexandria">
           Close
         </button>
 

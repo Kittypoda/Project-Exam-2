@@ -16,7 +16,6 @@ export default function MyVenuesList() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedVenue, setSelectedVenue] = useState(null);
-  
 
   useEffect(() => {
     fetchVenues();
