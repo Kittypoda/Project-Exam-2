@@ -124,16 +124,16 @@ export default function Home() {
     <>
       <section className="relative h-[60vh] md:h-[80vh] overflow-hidden px-2 md:px-6">
         <div className="relative h-full max-w-7xl mx-auto px-6 overflow-hidden rounded-40px rounded-tr-none">
-          <div className="absolute inset-0 w-[120%] -translate-x-1/2 animate-float-x">
+          <div className="absolute inset-0 w-[120%] md:-translate-x-1/2 md:animate-float-x">
             <img src={banner} alt="Beautiful destination" className="w-full h-full object-cover" />
           </div>
           <div className="absolute inset-0 bg-overlaygreen/40"></div>
           <div className="relative z-10 flex flex-col justify-center h-full px-[10%] md:px-[15%]">
-            <div className="text-3xl text-white md:text-5xl font-alexandria font-semibold text-center md:text-left">
+            <div className="text-3xl text-white md:text-5xl font-alexandria font-semibold md:text-left">
               A bed for every adventure
             </div>
-            <div className="mt-2 flex items-center justify-center md:justify-start gap-2 group">
-              <div className=" text-xl pr-4 md:text-3xl text-white font-alexandria font-light">
+            <div className="mt-2 flex items-center  md:justify-start gap-2 group">
+              <div className=" text-2xl pr-4 md:text-3xl text-white font-alexandria font-light">
                 Explore
               </div>
               <a
@@ -142,6 +142,7 @@ export default function Home() {
                 aria-label="Scroll to venues"
               >
                 <svg
+                  className=" h-10 md:h-20"
                   width="14"
                   height="60"
                   viewBox="0 0 16 71"
