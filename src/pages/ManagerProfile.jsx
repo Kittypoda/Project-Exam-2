@@ -170,22 +170,22 @@ export default function ManagerProfile() {
         <nav className="space-y-4">
           <button
             onClick={() => handleSectionChange('myVenues')}
-            className="block font-alexandria w-full text-left hover:underline"
+            className="block font-alexandria w-full md:text-left hover:underline"
           >
             My venues
           </button>
           <button
             onClick={() => handleSectionChange('bookings')}
-            className="block w-full text-left font-alexandria hover:underline"
+            className="block w-full md:text-left font-alexandria hover:underline"
           >
             Upcoming bookings
           </button>
-          <h3 className="font-semibold font-alexandria pt-10 mb-2 text-xl">Traveler</h3>
+          <div className="border-t border-gray-200"></div>
           <button
             onClick={() => handleSectionChange('travelerBookings')}
-            className="block font-alexandria w-full text-left hover:underline"
+            className="block font-alexandria w-full md:text-left hover:underline"
           >
-            My upcoming bookings
+            My stays
           </button>
         </nav>
       </aside>
@@ -200,7 +200,7 @@ export default function ManagerProfile() {
         {activeSection === 'bookings' && <UpcomingBookings />}
         {activeSection === 'travelerBookings' && (
           <>
-            <h1 className="text-xl font-normal pb-10 pt-6">My upcoming bookings</h1>
+            <h1 className="text-xl font-normal pb-10 pt-6">My stays</h1>
             {Object.keys(groupedTravelerBookings).length === 0 ? (
               <p>No bookings yet.</p>
             ) : (

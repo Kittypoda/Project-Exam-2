@@ -88,7 +88,7 @@ export default function Header() {
             Close
           </button>
 
-          <div className="flex flex-col items-center p-6">
+          <div className="flex flex-col w-80 items-center p-6">
             {!isLoggedIn && (
               <>
                 <Link

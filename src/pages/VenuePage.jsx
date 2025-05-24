@@ -298,9 +298,9 @@ export default function VenuePage() {
             </button>
             <button
               onClick={() => (window.location.href = '/')}
-              className="text-sm underline text-gray-600 hover:text-black"
+              className="text-sm underline font-alexandria hover:text-black"
             >
-              Go back home
+              Or go back home
             </button>
           </div>
         </ModalShell>

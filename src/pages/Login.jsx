@@ -61,7 +61,7 @@ export default function Login() {
       <div className="flex justify-center px-8 py-40">
         <div className="w-full max-w-md flex flex-col items-center">
           <form onSubmit={handleSubmit} className="w-full flex flex-col">
-            <h1 className="font-alexandria font-semibold p-2 text-center">Log in</h1>
+            <h1 className="font-alexandria font-semibold p-2 text-center">Sign in</h1>
             <h2 className="text-center p-2">
               New here?{' '}
               <Link to="/register" className="underline text-underline">
@@ -89,7 +89,7 @@ export default function Login() {
             />
 
             <button type="submit" className="btn btn-primary w-full">
-              Login
+              Log in
             </button>
 
             {error && <p className="text-red-600 text-sm mt-2">{error}</p>}
