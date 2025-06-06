@@ -1,10 +1,18 @@
-# Holidaze – Project Exam 2
+# Holidaze 
 
-Welcome to **Holidaze**, a venue booking web application built as the final project in the Front-End Development program at Noroff.
+Welcome to **Holidaze** – a modern and visually clean venue booking platform, developed as my final exam project in the Front-End Development program at Noroff.
 
-## About
+This project challenged me to think holistically about both user experience and technical implementation, with a clear focus on accessibility, responsiveness, and role-based functionality. The goal was to create a booking system that feels easy to use, inspiring to explore, and trustworthy to interact with.
 
-Holidaze is a platform where users can browse, search, and book venues for their travels, while venue managers can list and manage accommodations. It offers similar functionality to modern venue booking platforms, with a responsive design and user-friendly experience.
+Holidaze is designed for three user types:
+- **Guests** (unregistered users who can browse and explore)
+- **Travelers** (logged-in users who can book stays)
+- **Venue Managers** (hosts who can list and manage their own venues)
+
+Throughout the project, I’ve worked with structured components in React, used Tailwind CSS to build a consistent visual identity, and connected to an external API to handle bookings, listings, and user logic.
+
+Below, you’ll find more information about the tech stack, features, and setup.
+
 
 ## Tech Stack
 
@@ -47,7 +55,7 @@ npm run dev
 
 https://holiholidaze.netlify.app/
 
-### 🧑‍💻 Author
+### Author
 
 Oda Rolstad Verbeke
 Front-End Development Student at Noroff
